@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HellfireMiles
@@ -14,7 +15,7 @@ namespace HellfireMiles
         string csvLocation;
         int weekno = 0;
         string[] classes = { "03", "06", "08", "09", "13", "20", "25", "26", "27", "31", "33", "37", "40", "45", "46", "47", "50", "55", "56", "73", "76", "81", "82", "83", "85", "86", "87" };
-        Thread[] threads;
+        Task[] threads;
         public double TotalMiles
         { get; set; }
         public double Journeys
@@ -259,15 +260,7 @@ namespace HellfireMiles
 
             if (result == DialogResult.OK)
             {
-                CompareStats cs = new CompareStats(saveFileDialog1.FileName, true);
-                threads = new Thread[classes.Length];
-                for (int i = 0; i < threads.Length; i++)
-                {
-                    new Thread(() => cs.addClassInfo(classes[i], saveFileDialog1.FileName)).Start();
-                    System.Diagnostics.Debug.Print("class " + classes[i] + " thread started");
-                    Thread.Sleep(50);
-                }
-                addRows(cs);
+                Task.Factory.StartNew(() => loadCS(saveFileDialog1.FileName));
             }
         }
         private void button6_Click_1(object sender, EventArgs e) //compare mileages
@@ -288,8 +281,6 @@ namespace HellfireMiles
         {
             while (true)
             {
-                button5.Invoke(new MethodInvoker(delegate { button5.Text = "Loading"; }));
-                button5.Invoke(new MethodInvoker(delegate { button5.Enabled = false; }));
                 try
                 {
                     Application.DoEvents();
@@ -301,6 +292,22 @@ namespace HellfireMiles
                     break;
                 }
             }
+        }
+
+        private void loadCS(string path)
+        {
+            button5.Invoke(new MethodInvoker(delegate { button5.Text = "Loading"; }));
+            button5.Invoke(new MethodInvoker(delegate { button5.Enabled = false; }));
+            CompareStats cs = new CompareStats(path, true);
+            threads = new Task[classes.Length-1];
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = Task.Factory.StartNew(() => cs.addClassInfo(classes[i], path));
+                System.Diagnostics.Debug.Print("class " + classes[i] + " thread started");
+                Thread.Sleep(50);
+            }
+            Task.WaitAll(threads);
+            addRows(cs);
         }
     }
 }

@@ -75,13 +75,13 @@ namespace HellfireMiles
             System.Diagnostics.Debug.Print("2 - " + category);
 
             Object[] row = new Object[] { "Class " + category + ": Total Mileage", Math.Round(jv.TotalMiles, 2), Math.Round(jv2.TotalMiles) };
-            dataGridView1.Invoke(new MethodInvoker(delegate { dataGridView1.Rows.Add(row); }));
-            row = new Object[] { "Class " + category + ": % Cleared", 100 * (tv.Cleared / (double)tv.NumLocos), 100 * (tv2.Cleared / (double)tv2.NumLocos) };
-            dataGridView1.Invoke(new MethodInvoker(delegate { dataGridView1.Rows.Add(row); }));
+            dataGridView1.Rows.Add(row);
+            row = new Object[] { "Class " + category + ": % Cleared", Math.Round(100 * (tv.Cleared / (double)tv.NumLocos), 2), Math.Round(100 * (tv2.Cleared / (double)tv2.NumLocos), 2) };
+            dataGridView1.Rows.Add(row);
             row = new Object[] { "Class " + category + ": # of Journeys", jv.Journeys, jv2.Journeys };
-            dataGridView1.Invoke(new MethodInvoker(delegate { dataGridView1.Rows.Add(row); }));
+            dataGridView1.Rows.Add(row);
             row = new Object[] { "Class " + category + ": Avg. Mi/Journey", x, x2 };
-            dataGridView1.Invoke(new MethodInvoker(delegate { dataGridView1.Rows.Add(row); }));
+            dataGridView1.Rows.Add(row);
         }
         public void CheckForThreads()
         {
@@ -95,7 +95,7 @@ namespace HellfireMiles
                         {
                             dataGridView1.Rows[i].Cells[1].Style.BackColor = Color.LightGreen;
                         }
-                        else if (Double.Parse((string)dataGridView1.Rows[i].Cells[1].Value.ToString()) < Double.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString()))
+                        else if (Double.Parse(dataGridView1.Rows[i].Cells[1].Value.ToString()) < Double.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString()))
                         {
                             dataGridView1.Rows[i].Cells[2].Style.BackColor = Color.LightGreen;
                         }
@@ -106,8 +106,14 @@ namespace HellfireMiles
             }
             while (true)
             {
-                Application.DoEvents();
-                Show();
+                try
+                {
+                    Application.DoEvents();
+                    Show();
+                } catch (Exception ex)
+                {
+                    break;
+                }
             }
         }
 
