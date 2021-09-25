@@ -1,0 +1,15 @@
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\bin\Debug\HellfireMiles.exe.config
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\bin\Debug\HellfireMiles.exe
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\bin\Debug\HellfireMiles.pdb
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.csprojAssemblyReference.cache
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.Properties.Resources.resources
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.csproj.GenerateResource.cache
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.csproj.CoreCompileInputs.cache
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.exe
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.pdb
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.FilterMenu.resources
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.JourneyView.resources
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.TractionView.resources
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.DataLocation.resources
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.YourName.resources
+C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.CompareStats.resources
