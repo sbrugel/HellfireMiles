@@ -17,7 +17,14 @@ namespace HellfireMiles
     public partial class TractionView : Form
     {
         string csvLocation;
-        int cleared = 0;
+        public int Cleared
+        {
+            get;set;
+        }
+        public int NumLocos
+        {
+            get;set;
+        }
         List<string> classes = new List<string>();
         public TractionView(bool traction, string classFilter, string importedFrom)
         {
@@ -43,17 +50,20 @@ namespace HellfireMiles
                         if (importedFrom.Equals(""))
                         { //yours
                             tv = new TractionView(false, category, "");
+
                         }
                         else
                         {
                             tv = new TractionView(false, category, importedFrom);
                         }
+                        Cleared = tv.Cleared;
+                        NumLocos = tv.dataGridView1.Rows.Count;
                         double x = Math.Round((jv.TotalMiles / jv.Journeys), 2);
                         if (jv.Journeys == 0)
                         {
                             x = 0.0;
                         }
-                        Object[] row = new Object[] { category, Math.Round(jv.TotalMiles, 2), jv.Journeys, x, tv.getPercentage() };
+                        Object[] row = new Object[] { category, Math.Round(jv.TotalMiles, 2), jv.Journeys, x, 100 * (tv.Cleared / (double)(tv.dataGridView1.Rows.Count - 1)) };
                         dataGridView1.Rows.Add(row);
                     }
                 } else
@@ -68,12 +78,14 @@ namespace HellfireMiles
                     {
                         tv = new TractionView(false, classFilter, importedFrom);
                     }
+                    Cleared = tv.Cleared;
+                    NumLocos = tv.dataGridView1.Rows.Count;
                     double x = Math.Round((jv.TotalMiles / jv.Journeys), 2);
                     if (jv.Journeys == 0)
                     {
                         x = 0.0;
                     }
-                    Object[] row = new Object[] { classFilter, Math.Round(jv.TotalMiles, 2), jv.Journeys, x, tv.getPercentage() };
+                    Object[] row = new Object[] { classFilter, Math.Round(jv.TotalMiles, 2), jv.Journeys, x, 100*(tv.Cleared / (double)(tv.dataGridView1.Rows.Count - 1)) };
                     dataGridView1.Rows.Add(row);
                 }
                 
@@ -200,7 +212,7 @@ namespace HellfireMiles
                     {
                         if (row.DefaultCellStyle.BackColor == Color.LightGreen)
                         {
-                            cleared++;
+                            Cleared++;
                         }
                     }
                     label1.Text = "Out of " + (dataGridView1.Rows.Count - 1) + " locos of class ";
@@ -209,8 +221,8 @@ namespace HellfireMiles
                         label1.Text += "ALL";
                     }
                     else label1.Text += classFilter;
-                    label1.Text += ", you have cleared " + cleared + " (about " + Math.Round(((double)cleared / (dataGridView1.Rows.Count - 1)) * 100, 2) + "%). ";
-                    switch ((int)(((double)cleared / (dataGridView1.Rows.Count - 1)) * 10))
+                    label1.Text += ", you have Cleared " + Cleared + " (about " + Math.Round(((double)Cleared / (dataGridView1.Rows.Count - 1)) * 100, 2) + "%). ";
+                    switch ((int)(((double)Cleared / (dataGridView1.Rows.Count - 1)) * 10))
                     {
                         case 10:
                             label1.Text += "Congratulations, that's all of them!";
@@ -326,7 +338,7 @@ namespace HellfireMiles
                     {
                         if (row.DefaultCellStyle.BackColor == Color.LightGreen)
                         {
-                            cleared++;
+                            Cleared++;
                         }
                     }
                     label1.Text = "Out of " + (dataGridView1.Rows.Count - 1) + " locos of class ";
@@ -335,8 +347,8 @@ namespace HellfireMiles
                         label1.Text += "ALL";
                     }
                     else label1.Text += classFilter;
-                    label1.Text += ", you have cleared " + cleared + " (about " + Math.Round(((double)cleared / (dataGridView1.Rows.Count - 1)) * 100, 2) + "%). ";
-                    switch ((int)(((double)cleared / (dataGridView1.Rows.Count - 1)) * 10))
+                    label1.Text += ", you have Cleared " + Cleared + " (about " + Math.Round((double)Cleared / (dataGridView1.Rows.Count - 1) * 100, 2) + "%). ";
+                    switch ((int)(((double)Cleared / (dataGridView1.Rows.Count - 1)) * 10))
                     {
                         case 10:
                             label1.Text += "Congratulations, that's all of them!";
@@ -399,7 +411,7 @@ namespace HellfireMiles
 
         public double getPercentage()
         {
-            return Math.Round(((double)cleared / (dataGridView1.Rows.Count - 1)) * 100, 2);
+            return Math.Round(((double)Cleared / (dataGridView1.Rows.Count - 1)) * 100, 2);
         }
 
         public void addClasses()

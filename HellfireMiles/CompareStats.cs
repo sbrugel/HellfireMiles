@@ -53,12 +53,11 @@ namespace HellfireMiles
         }
         public void addClassInfo(string category, string savefile) //for stats
         {
+            System.Diagnostics.Debug.Print("0 - " + category);
             JourneyView jv = new JourneyView("", category, ""); //your stats
             TractionView tv = new TractionView(true, category, "");
             JourneyView jv2 = new ImportedJourneyView("", category, "", savefile); //their stats
             TractionView tv2 = new TractionView(true, category, savefile);
-            
-            System.Diagnostics.Debug.Print("0 - " + category);
             //for averages only
             double x = Math.Round((jv.TotalMiles / jv.Journeys), 2);
             if (jv.Journeys == 0)
@@ -77,7 +76,7 @@ namespace HellfireMiles
 
             Object[] row = new Object[] { "Class " + category + ": Total Mileage", Math.Round(jv.TotalMiles, 2), Math.Round(jv2.TotalMiles) };
             dataGridView1.Invoke(new MethodInvoker(delegate { dataGridView1.Rows.Add(row); }));
-            row = new Object[] { "Class " + category + ": % Cleared", tv.getPercentage(), tv2.getPercentage() };
+            row = new Object[] { "Class " + category + ": % Cleared", 100 * (tv.Cleared / (double)tv.NumLocos), 100 * (tv2.Cleared / (double)tv2.NumLocos) };
             dataGridView1.Invoke(new MethodInvoker(delegate { dataGridView1.Rows.Add(row); }));
             row = new Object[] { "Class " + category + ": # of Journeys", jv.Journeys, jv2.Journeys };
             dataGridView1.Invoke(new MethodInvoker(delegate { dataGridView1.Rows.Add(row); }));

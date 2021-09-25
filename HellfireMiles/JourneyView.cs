@@ -261,10 +261,11 @@ namespace HellfireMiles
             {
                 CompareStats cs = new CompareStats(saveFileDialog1.FileName, true);
                 threads = new Thread[classes.Length];
-                for (int i = 0; i < classes.Length-1; i++)
+                for (int i = 0; i < threads.Length; i++)
                 {
-                    threads[i] = new Thread(() => cs.addClassInfo(classes[i], saveFileDialog1.FileName));
-                    threads[i].Start();
+                    new Thread(() => cs.addClassInfo(classes[i], saveFileDialog1.FileName)).Start();
+                    System.Diagnostics.Debug.Print("class " + classes[i] + " thread started");
+                    Thread.Sleep(50);
                 }
                 addRows(cs);
             }
@@ -289,7 +290,6 @@ namespace HellfireMiles
             {
                 button5.Invoke(new MethodInvoker(delegate { button5.Text = "Loading"; }));
                 button5.Invoke(new MethodInvoker(delegate { button5.Enabled = false; }));
-                cs.dataGridView1.Refresh();
                 try
                 {
                     Application.DoEvents();
