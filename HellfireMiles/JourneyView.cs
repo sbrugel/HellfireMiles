@@ -15,7 +15,7 @@ namespace HellfireMiles
         string csvLocation;
         int weekno = 0;
         string[] classes = { "03", "06", "08", "09", "13", "20", "25", "26", "27", "31", "33", "37", "40", "45", "46", "47", "50", "55", "56", "73", "76", "81", "82", "83", "85", "86", "87" };
-        Task[] threads;
+        Thread[] threads;
         public double TotalMiles
         { get; set; }
         public double Journeys
@@ -277,37 +277,42 @@ namespace HellfireMiles
                 cs.addClassInfo();
             }
         }
-        private void addRows(CompareStats cs)
-        {
-            while (true)
-            {
-                try
-                {
-                    Application.DoEvents();
-                    cs.Show();
-                } catch (ObjectDisposedException ex)
-                {
-                    button5.Invoke(new MethodInvoker(delegate { button5.Text = "Compare Stats"; }));
-                    button5.Invoke(new MethodInvoker(delegate { button5.Enabled = true; }));
-                    break;
-                }
-            }
-        }
 
         private void loadCS(string path)
         {
             button5.Invoke(new MethodInvoker(delegate { button5.Text = "Loading"; }));
             button5.Invoke(new MethodInvoker(delegate { button5.Enabled = false; }));
             CompareStats cs = new CompareStats(path, true);
-            threads = new Task[classes.Length-1];
+            threads = new Thread[classes.Length];
             for (int i = 0; i < threads.Length; i++)
             {
-                threads[i] = Task.Factory.StartNew(() => cs.addClassInfo(classes[i], path));
+                threads[i] = new Thread(delegate ()
+                {
+                    cs.addClassInfo(classes[i], path);
+                });
+                threads[i].Start();
                 System.Diagnostics.Debug.Print("class " + classes[i] + " thread started");
-                Thread.Sleep(50);
+                Thread.Sleep(150);
             }
-            Task.WaitAll(threads);
-            addRows(cs);
+            foreach (var thread in threads)
+            {
+                thread.Join();
+            }
+            while (true)
+            {
+                try
+                {
+                    Application.DoEvents();
+                    cs.Show();
+                    cs.dataGridView1.Refresh();
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    button5.Invoke(new MethodInvoker(delegate { button5.Text = "Compare Stats"; }));
+                    button5.Invoke(new MethodInvoker(delegate { button5.Enabled = true; }));
+                    break;
+                }
+            }
         }
     }
 }
