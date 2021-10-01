@@ -11,5 +11,4 @@ C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.
 C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.JourneyView.resources
 C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.TractionView.resources
 C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.DataLocation.resources
-C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.YourName.resources
 C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.CompareStats.resources

@@ -45,6 +45,9 @@ namespace HellfireMiles
             yourData.Start();
             theirData.Start();
             checker.Start();
+            yourData.Join();
+            theirData.Join();
+            checker.Join();
         }
         public void addClassInfo(string category, string savefile) //for stats
         {
@@ -77,6 +80,7 @@ namespace HellfireMiles
             dataGridView1.Rows.Add(row);
             row = new Object[] { "Class " + category + ": Avg. Mi/Journey", x, x2 };
             dataGridView1.Rows.Add(row);
+            
         }
         public void CheckForThreads()
         {
@@ -196,7 +200,6 @@ namespace HellfireMiles
                     }
                 }
             }
-            MessageBox.Show("1 done");
         }
 
         public void getTheirHaulages()
@@ -276,7 +279,6 @@ namespace HellfireMiles
                     }
                 }
             }
-            MessageBox.Show("2 done");
         }
 
         public string getName(string importedFile)

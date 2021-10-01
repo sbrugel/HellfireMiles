@@ -21,6 +21,12 @@ namespace HellfireMiles
         public double Journeys
         { get; set; }
 
+        /// <summary>
+        /// Initializes an object of the JourneyView class that takes optional parameters to filter out certain journeys from all loaded Hellfire .CSV files.
+        /// </summary>
+        /// <param name="weekFilter">Show all journeys from only one week, specified by user. If "", does not filter by week.</param>
+        /// <param name="classFilter">Show all journeys with haulage from only one class, specified by user. If "", does not filter by class.</param>
+        /// <param name="locoFilter">Show all journeys with haulage from only one loco, specified by user. If "", does not filter by loco.</param>
         public JourneyView(string weekFilter, string classFilter, string locoFilter)
         {
             InitializeComponent();
@@ -48,6 +54,7 @@ namespace HellfireMiles
             List<string> csv = new List<string>();
             foreach (FileInfo fi in csvSorted)
             {
+                //add csv files into the csv array in order by last modified time, so weeks are sequential
                 csv.Add(csvLocation + "\\" + fi.ToString());
             }
             foreach (var movesList in csv)
@@ -156,7 +163,13 @@ namespace HellfireMiles
             label1.Text = "You have been on " + Journeys + " journeys, covering a total of " + TotalMiles + " miles! ";
         }
 
-        //used for finding particular items per line. commas are the main arg here, items are found based on comma #
+        /// <summary>
+        /// Finds the nth index of a substring in a string.
+        /// </summary>
+        /// <param name="str">The string to search.</param>
+        /// <param name="value">The substring to look for.</param>
+        /// <param name="nth">What occurence of the substring to find.</param>
+        /// <returns>An integer corresponding to the position of the nth index of value in str</returns>
         public static int indexOfNth(string str, string value, int nth = 0)
         {
             if (nth < 0)
@@ -172,7 +185,13 @@ namespace HellfireMiles
             return offset;
         }
 
-        //in complement with the above, finds substring between indices (if that's how the plural is spelt!)
+        /// <summary>
+        /// In complement with the above, finds substring between indices (if that's how the plural is spelt!)
+        /// </summary>
+        /// <param name="str">The string to search.</param>
+        /// <param name="from">The starting index of the string to search</param>
+        /// <param name="to">The ending index of the string, stop searching here</param>
+        /// <returns>The substring of str from the start to end index specified by the code</returns>
         public string substringFromTo(string str, int from, int to)
         {
             try
@@ -184,36 +203,45 @@ namespace HellfireMiles
                 return str.Substring(from, to - from);
             } catch (Exception ex)
             {
-                return "hi";
+                return "";
             }
             
         }
 
-        private void button1_Click(object sender, EventArgs e) //filter journeys
+        /// <summary>
+        /// Opens the filter menu.
+        /// </summary>
+        private void button1_Click(object sender, EventArgs e)
         {
             FilterMenu f = new FilterMenu();
             f.Show();
         }
 
-        private void button2_Click(object sender, EventArgs e) //open traction viewer
+        /// <summary>
+        /// Opens the traction view.
+        /// </summary>
+        private void button2_Click(object sender, EventArgs e)
         {
             TractionView t = new TractionView(false, "", "");
             t.Show();
         }
 
-        private void button3_Click(object sender, EventArgs e) //export
+        /// <summary>
+        /// Opens the export menu/a file browser.
+        /// </summary>
+        private void button3_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "HellfireMiles Data|*.hfm";
+            saveFileDialog1.Filter = "HellfireMiles Data|*.hfm"; //what to display on the file dialog
             saveFileDialog1.Title = "Export Moves";
             DialogResult result = saveFileDialog1.ShowDialog();
 
-            if (result == DialogResult.OK)
+            if (result == DialogResult.OK) //user saved a file
             {
                 string name = Interaction.InputBox("Enter your name:", "", "");
                 string path = saveFileDialog1.FileName;
 
-                if (!File.Exists(path))
+                if (!File.Exists(path)) // does the file already exist?
                 {
                     // create a file to write to
                     using (StreamWriter sw = File.CreateText(path))
@@ -230,14 +258,20 @@ namespace HellfireMiles
                                 row.Cells["Train"].Value + "," + row.Cells["Mileage"].Value); //writes all data in each line
                             iter++;
                         }
-                        sw.WriteLine(name);
-                        MessageBox.Show("Moves list exported as: " + saveFileDialog1.FileName);
+                        sw.WriteLine(name); //write inputted name on the bottom of the file
+                        MessageBox.Show("Moves list exported as: " + saveFileDialog1.FileName, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
+                } else
+                {
+                    MessageBox.Show("It seems like this file already exists. Please create a new file to export to.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-        private void button4_Click(object sender, EventArgs e) //import .hfm data
+        /// <summary>
+        /// Opens the import menu/a file browser to import .hfm data in a child window.
+        /// </summary>
+        private void button4_Click(object sender, EventArgs e)
         {
             OpenFileDialog saveFileDialog1 = new OpenFileDialog();
             saveFileDialog1.Filter = "HellfireMiles Data|*.hfm";
@@ -251,7 +285,10 @@ namespace HellfireMiles
             }
         }
 
-        private void button5_Click(object sender, EventArgs e) //compare stats
+        /// <summary>
+        /// Opens a file browser to compare statistics between two users, using .hfm data
+        /// </summary>
+        private void button5_Click(object sender, EventArgs e)
         {
             OpenFileDialog saveFileDialog1 = new OpenFileDialog();
             saveFileDialog1.Filter = "HellfireMiles Data|*.hfm";
@@ -260,24 +297,29 @@ namespace HellfireMiles
 
             if (result == DialogResult.OK)
             {
-                Task.Factory.StartNew(() => loadCS(saveFileDialog1.FileName));
+                Task.Factory.StartNew(() => loadCS(saveFileDialog1.FileName)); //load the window in the background, so the main window won't freeze
             }
         }
+
+        /// <summary>
+        /// Opens a file browser to compare loco mileages between two users, using .hfm data
+        /// </summary>
         private void button6_Click_1(object sender, EventArgs e) //compare mileages
         {
             OpenFileDialog saveFileDialog1 = new OpenFileDialog();
             saveFileDialog1.Filter = "HellfireMiles Data|*.hfm";
             saveFileDialog1.Title = "Import Moves";
             DialogResult result = saveFileDialog1.ShowDialog();
-
             if (result == DialogResult.OK)
             {
-                MessageBox.Show(saveFileDialog1.FileName);
-                CompareStats cs = new CompareStats(saveFileDialog1.FileName, false);
-                cs.addClassInfo();
+                Task.Factory.StartNew(() => loadCM(saveFileDialog1.FileName)); //load the window in the background, so the main window won't freeze
             }
         }
 
+        /// <summary>
+        /// Load the CompareStats window for statistics
+        /// </summary>
+        /// <param name="path">The .hfm file to load.</param>
         private void loadCS(string path)
         {
             button5.Invoke(new MethodInvoker(delegate { button5.Text = "Loading"; }));
@@ -296,8 +338,40 @@ namespace HellfireMiles
             }
             foreach (var thread in threads)
             {
-                thread.Join();
+                thread.Join(); //wait for all loco threads to finish before loading window
             }
+            while (!cs.IsDisposed)
+            {
+                try
+                {
+                    Application.DoEvents();
+                    cs.Show();
+                    cs.dataGridView1.Refresh();
+                }
+                catch (ObjectDisposedException ex) //reset buttons when the window is closed
+                {
+                    button5.Invoke(new MethodInvoker(delegate { button5.Text = "Compare Stats"; }));
+                    button5.Invoke(new MethodInvoker(delegate { button5.Enabled = true; }));
+                    break; //exit this loop
+                }
+            }
+        }
+
+        /// <summary>
+        /// Load the CompareStats window for mileages
+        /// </summary>
+        /// <param name="path">The .hfm file to load.</param>
+        private void loadCM(string path)
+        {
+            button6.Invoke(new MethodInvoker(delegate { button6.Text = "Loading"; }));
+            button6.Invoke(new MethodInvoker(delegate { button6.Enabled = false; }));
+            CompareStats cs = new CompareStats(path, false);
+            Thread t = new Thread(delegate ()
+            {
+                cs.addClassInfo();
+            });
+            t.Start();
+            t.Join(); //wait for loco threads to finish before loading window
             while (true)
             {
                 try
@@ -306,11 +380,11 @@ namespace HellfireMiles
                     cs.Show();
                     cs.dataGridView1.Refresh();
                 }
-                catch (ObjectDisposedException ex)
+                catch (ObjectDisposedException ex) //reset buttons when the window is closed
                 {
-                    button5.Invoke(new MethodInvoker(delegate { button5.Text = "Compare Stats"; }));
-                    button5.Invoke(new MethodInvoker(delegate { button5.Enabled = true; }));
-                    break;
+                    button6.Invoke(new MethodInvoker(delegate { button6.Text = "Compare Mileages"; }));
+                    button6.Invoke(new MethodInvoker(delegate { button6.Enabled = true; }));
+                    break; //exit this loop
                 }
             }
         }

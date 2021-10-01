@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace HellfireMiles
 {
@@ -14,6 +15,7 @@ namespace HellfireMiles
             {
                 int iter = 0;
                 string currentLine, name = "Default";
+
                 /*
                 * current line reads the full line of the .hfm file
                 * name - this is the user's name, inputted when exporting their data
@@ -43,20 +45,26 @@ namespace HellfireMiles
 
                     if (!classFilter.Equals("")) //is there a class filter?
                     {
-                        if (loco1.Substring(0, 2).Equals(classFilter))
+                        try
                         {
-                            if (!m.Equals("None")) //not a placeholder move, e.g. walking?
+                            if (loco1.Substring(0, 2).Equals(classFilter))
                             {
-                                miles = double.Parse(m);
-                                Journeys++;
+                                if (!m.Equals("None")) //not a placeholder move, e.g. walking?
+                                {
+                                    miles = double.Parse(m);
+                                    Journeys++;
+                                }
+                                else
+                                {
+                                    miles = double.Parse("0.0");
+                                }
+                                TotalMiles += miles; //add the miles from this move
+                                Object[] row = new object[] { weekno, dow, loco1, loco2, loco3, loco4, from, to, hc, train, miles };
+                                dataGridView1.Rows.Add(row); //add the row of this move
                             }
-                            else
-                            {
-                                miles = double.Parse("0.0");
-                            }
-                            TotalMiles += miles; //add the miles from this move
-                            Object[] row = new object[] { weekno, dow, loco1, loco2, loco3, loco4, from, to, hc, train, miles };
-                            dataGridView1.Rows.Add(row); //add the row of this move
+                        } catch (Exception ex)
+                        {
+                            //just skip the line
                         }
                     }
                     else //no filter
