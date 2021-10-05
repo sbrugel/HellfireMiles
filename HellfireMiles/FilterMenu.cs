@@ -10,59 +10,55 @@ namespace HellfireMiles
             InitializeComponent();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            numericUpDown1.Enabled = false;
-            textBox1.Enabled = false;
-            textBox2.Enabled = false;
-            if (comboBox1.SelectedItem.Equals("Week"))
-            {
-               numericUpDown1.Enabled = true;
-            }
-            else if (comboBox1.SelectedItem.Equals("Class"))
-            {
-                textBox1.Enabled = true;
-            }
-            else if (comboBox1.SelectedItem.Equals("Unit"))
-            {
-                textBox2.Enabled = true;
-            }
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             JourneyView JV = null;
-            if (comboBox1.SelectedItem.Equals("Week"))
+            string weekParam, classParam, locoParam;
+            if (!checkBox1.Checked)
             {
-                JV = new JourneyView(numericUpDown1.Value.ToString(), "", "");
+                weekParam = "";
             }
-            else if (comboBox1.SelectedItem.Equals("Class"))
+            else weekParam = numericUpDown1.Value.ToString();
+            if (!checkBox2.Checked)
             {
-                JV = new JourneyView("", textBox1.Text, "");
+                classParam = "";
             }
-            else if (comboBox1.SelectedItem.Equals("Unit"))
+            else classParam = textBox1.Text;
+            if (!checkBox3.Checked)
             {
-                JV = new JourneyView("", "", textBox2.Text);
+                locoParam = "";
             }
-            JV.Show();
+            else locoParam = textBox2.Text;
+            if (!checkBox1.Checked && !checkBox2.Checked && !checkBox3.Checked)
+            {
+                MessageBox.Show("You didn't check any filters!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            } else
+            {
+                JV = new JourneyView(weekParam, classParam, locoParam);
+                JV.Show();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            JourneyView JV = null;
-            if (comboBox1.SelectedItem.Equals("Week"))
-            {
-                JV = new JourneyView(numericUpDown1.Value.ToString(), "", "");
-            }
-            else if (comboBox1.SelectedItem.Equals("Class"))
-            {
-                JV = new JourneyView("", textBox1.Text, "");
-            }
-            else if (comboBox1.SelectedItem.Equals("Unit"))
-            {
-                JV = new JourneyView("", "", textBox2.Text);
-            }
-            label3.Text = JV.TotalMiles + " miles, " + JV.Journeys + " trips";
+            JourneyView JV = new JourneyView("", "", textBox2.Text);
+            label4.Text = JV.TotalMiles + " miles, " + JV.Journeys + " trips";
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            numericUpDown1.Enabled = !numericUpDown1.Enabled; //toggle
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            textBox1.Enabled = !textBox1.Enabled;
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            textBox2.Enabled = !textBox2.Enabled;
+            button2.Enabled = !button2.Enabled;
         }
     }
 }

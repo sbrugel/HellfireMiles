@@ -48,6 +48,11 @@ namespace HellfireMiles
                 }
             }
 
+            //set tooltip of button7 to display the current dir
+            ToolTip tt1 = new ToolTip();
+            tt1.SetToolTip(button7, "The current moves list folder is " + csvLocation);
+            tt1.InitialDelay = 0;
+
             //sort all .csvs by date created and add them to an array for reference
             //this is because by defualt they are sorted alphabetically, leading to week #100 and beyond being put before week #20, etc.
             var csvSorted = new DirectoryInfo(csvLocation).GetFiles("*.csv").OrderBy(f => f.LastWriteTime).ToArray();
@@ -86,59 +91,42 @@ namespace HellfireMiles
 
                         if (currentLine.Length > 10) //is it just the name? if so, skip the line
                         {
-                            if (!weekFilter.Equals("")) //sorting by week?
-                            {
-                                if (weekno.ToString().Equals(weekFilter))
+                            if (!weekFilter.Equals("") || !classFilter.Equals("") || !locoFilter.Equals(""))
+                            { //any filters on? 
+                                if (!weekFilter.Equals("")) //sorting by week?
                                 {
-                                    if (!m.Equals("None"))
+                                    if (!weekno.ToString().Equals(weekFilter))
                                     {
-                                        miles = double.Parse(m);
-                                        Journeys++;
+                                        continue; //does not match this enabled filter, skip the line
                                     }
-                                    else //placeholder move
-                                    {
-                                        miles = double.Parse("0.0");
-                                    }
-                                    TotalMiles += miles;
-                                    Object[] row = new object[] { weekno, dow, loco1, loco2, loco3, loco4, from, to, hc, train, miles };
-                                    dataGridView1.Rows.Add(row);
                                 }
-                            }
-                            else if (!classFilter.Equals("")) //sorting by class?
-                            {
-                                if (loco1.Substring(0, 2).Equals(classFilter) || loco2.Substring(0, 2).Equals(classFilter) || loco3.Substring(0, 2).Equals(classFilter) || loco4.Substring(0, 2).Equals(classFilter)) //check all possible locos for the first 3 numbers of the class
+                                if (!classFilter.Equals("")) //sorting by class?
                                 {
-                                    if (!m.Equals("None")) 
+                                    if (!loco1.Substring(0, 2).Equals(classFilter) || loco2.Substring(0, 2).Equals(classFilter) || loco3.Substring(0, 2).Equals(classFilter) || loco4.Substring(0, 2).Equals(classFilter)) //check all possible locos for the first 3 numbers of the class
                                     {
-                                        miles = double.Parse(m);
-                                        Journeys++;
+                                        continue; //does not match this enabled filter, skip the line
                                     }
-                                    else //placeholder move
-                                    {
-                                        miles = double.Parse("0.0");
-                                    }
-                                    TotalMiles += miles;
-                                    Object[] row = new object[] { weekno, dow, loco1, loco2, loco3, loco4, from, to, hc, train, miles };
-                                    dataGridView1.Rows.Add(row);
                                 }
-                            }
-                            else if (!locoFilter.Equals("")) //sorting by locomotive?
-                            {
-                                if (loco1.Equals(locoFilter) || loco2.Equals(locoFilter) || loco3.Equals(locoFilter) || loco4.Equals(locoFilter)) //check all possible locomotives
+                                if (!locoFilter.Equals("")) //sorting by locomotive?
                                 {
-                                    if (!m.Equals("None"))
+                                    if (!loco1.Equals(locoFilter) || loco2.Equals(locoFilter) || loco3.Equals(locoFilter) || loco4.Equals(locoFilter)) //check all possible locomotives
                                     {
-                                        miles = double.Parse(m);
-                                        Journeys++;
+                                        continue; //does not match this enabled filter, skip the line
                                     }
-                                    else //placeholder move
-                                    {
-                                        miles = double.Parse("0.0");
-                                    }
-                                    TotalMiles += miles;
-                                    Object[] row = new object[] { weekno, dow, loco1, loco2, loco3, loco4, from, to, hc, train, miles };
-                                    dataGridView1.Rows.Add(row);
                                 }
+                                //all filters match for this move, calculate mileage, etc.
+                                if (!m.Equals("None"))
+                                {
+                                    miles = double.Parse(m);
+                                    Journeys++;
+                                }
+                                else //placeholder move
+                                {
+                                    miles = double.Parse("0.0");
+                                }
+                                TotalMiles += miles;
+                                Object[] row = new object[] { weekno, dow, loco1, loco2, loco3, loco4, from, to, hc, train, miles };
+                                dataGridView1.Rows.Add(row);
                             }
                             else
                             {
@@ -160,7 +148,7 @@ namespace HellfireMiles
                     }
                 }
             }
-            label1.Text = "You have been on " + Journeys + " journeys, covering a total of " + TotalMiles + " miles! ";
+            label1.Text = "You have been on " + Journeys + " journeys, covering a total of " + Decimal.Round((decimal)TotalMiles, 2) + " miles! ";
         }
 
         /// <summary>
@@ -385,6 +373,30 @@ namespace HellfireMiles
                     button6.Invoke(new MethodInvoker(delegate { button6.Text = "Compare Mileages"; }));
                     button6.Invoke(new MethodInvoker(delegate { button6.Enabled = true; }));
                     break; //exit this loop
+                }
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e) //change moves list directory
+        {
+            DialogResult result = folderBrowserDialog1.ShowDialog();
+            string movesdir;
+            string dirfile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HellfireMiles\\dir.txt";
+            if (result == DialogResult.OK)
+            {
+                movesdir = @folderBrowserDialog1.SelectedPath;
+                if (movesdir != null) //a folder was actually chosen
+                {
+                    File.WriteAllText(dirfile, String.Empty); //clear current dir
+                    using (StreamWriter sw = File.CreateText(dirfile))
+                    {
+                        sw.WriteLine(movesdir);
+                    }
+                    MessageBox.Show("Setup completed, please re-run the program to access the updated moves list.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                } else
+                {
+                    MessageBox.Show("You did not choose a folder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

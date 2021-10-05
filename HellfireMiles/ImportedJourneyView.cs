@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HellfireMiles.Properties;
+using System;
+using System.Linq;
 using System.IO;
 using System.Windows.Forms;
 
@@ -8,6 +10,16 @@ namespace HellfireMiles
     {
         public ImportedJourneyView(string weekFilter, string classFilter, string locoFilter, string importedFrom) : base (weekFilter, classFilter, locoFilter)
         {
+            //disable all buttons on the form
+            //fix this eventually; for loop iterators wouldn't work here for some reason
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            button4.Enabled = false;
+            button5.Enabled = false;
+            button6.Enabled = false;
+            button7.Enabled = false;
+
             dataGridView1.Rows.Clear();
             Journeys = 0;
             TotalMiles = 0;
@@ -92,7 +104,7 @@ namespace HellfireMiles
                         dataGridView1.Rows.Add(row); //add the row of this move
                     }
                     iter++;
-                    label1.Text = name + " has been on " + Journeys + " journeys, covering a total of " + TotalMiles + " miles!";
+                    label1.Text = name + " has been on " + Journeys + " journeys, covering a total of " + Decimal.Round((decimal)TotalMiles, 2) + " miles!";
                     button4.Enabled = false;
                 }
             }

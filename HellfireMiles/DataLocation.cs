@@ -9,6 +9,7 @@ namespace HellfireMiles
         string movesdir;
         public DataLocation()
         {
+            button2.Enabled = false;
             InitializeComponent();
         }
 
@@ -17,6 +18,7 @@ namespace HellfireMiles
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
+                button2.Enabled = true;
                 movesdir = @folderBrowserDialog1.SelectedPath;
                 textBox1.Text = movesdir;
             }

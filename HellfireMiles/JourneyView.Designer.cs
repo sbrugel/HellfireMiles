@@ -39,6 +39,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -133,11 +134,22 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click_1);
             // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(588, 489);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(152, 23);
+            this.button7.TabIndex = 9;
+            this.button7.Text = "Change Moves List Directory";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // JourneyView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1082, 524);
+            this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
@@ -166,6 +178,7 @@
         protected System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         protected System.Windows.Forms.DataGridView dataGridView1;
         protected System.Windows.Forms.Button button6;
+        protected System.Windows.Forms.Button button7;
     }
 }
 
