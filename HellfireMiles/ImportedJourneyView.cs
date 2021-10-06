@@ -1,8 +1,5 @@
-﻿using HellfireMiles.Properties;
-using System;
-using System.Linq;
+﻿using System;
 using System.IO;
-using System.Windows.Forms;
 
 namespace HellfireMiles
 {
@@ -10,6 +7,7 @@ namespace HellfireMiles
     {
         public ImportedJourneyView(string weekFilter, string classFilter, string locoFilter, string importedFrom) : base (weekFilter, classFilter, locoFilter)
         {
+            Text = "Hellfire Miles"; //form title
             //disable all buttons on the form
             //fix this eventually; for loop iterators wouldn't work here for some reason
             button1.Enabled = false;

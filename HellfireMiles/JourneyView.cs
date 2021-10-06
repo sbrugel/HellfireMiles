@@ -93,6 +93,15 @@ namespace HellfireMiles
                         {
                             if (!weekFilter.Equals("") || !classFilter.Equals("") || !locoFilter.Equals(""))
                             { //any filters on? 
+                                //disable all buttons on the form
+                                //fix this eventually; for loop iterators wouldn't work here for some reason
+                                button1.Enabled = false;
+                                button2.Enabled = false;
+                                button3.Enabled = false;
+                                button4.Enabled = false;
+                                button5.Enabled = false;
+                                button6.Enabled = false;
+                                button7.Enabled = false;
                                 if (!weekFilter.Equals("")) //sorting by week?
                                 {
                                     if (!weekno.ToString().Equals(weekFilter))
@@ -193,7 +202,6 @@ namespace HellfireMiles
             {
                 return "";
             }
-            
         }
 
         /// <summary>
@@ -210,8 +218,29 @@ namespace HellfireMiles
         /// </summary>
         private void button2_Click(object sender, EventArgs e)
         {
-            TractionView t = new TractionView(false, "", "");
-            t.Show();
+            Task.Factory.StartNew(() => loadTV()); //load the window in the background, so the main window won't freeze
+        }
+
+        private void loadTV()
+        {
+            button2.Invoke(new MethodInvoker(delegate { button2.Text = "Loading"; }));
+            button2.Invoke(new MethodInvoker(delegate { button2.Enabled = false; }));
+            TractionView tv = new TractionView("", "");
+            Thread t = new Thread(delegate ()
+            {
+                try
+                {
+                    Application.Run(tv);
+                }
+                catch (ObjectDisposedException)
+                {
+                    //ignore since form is closed
+                }
+            });
+            t.Start();
+            t.Join();
+            button2.Invoke(new MethodInvoker(delegate { button2.Text = "Traction View"; }));
+            button2.Invoke(new MethodInvoker(delegate { button2.Enabled = true; }));
         }
 
         /// <summary>
@@ -328,21 +357,21 @@ namespace HellfireMiles
             {
                 thread.Join(); //wait for all loco threads to finish before loading window
             }
-            while (!cs.IsDisposed)
+            Thread t = new Thread(delegate ()
             {
                 try
                 {
-                    Application.DoEvents();
-                    cs.Show();
-                    cs.dataGridView1.Refresh();
+                    Application.Run(cs);
                 }
-                catch (ObjectDisposedException ex) //reset buttons when the window is closed
+                catch (ObjectDisposedException)
                 {
-                    button5.Invoke(new MethodInvoker(delegate { button5.Text = "Compare Stats"; }));
-                    button5.Invoke(new MethodInvoker(delegate { button5.Enabled = true; }));
-                    break; //exit this loop
+                    //ignore
                 }
-            }
+            });
+            t.Start();
+            t.Join();
+            button5.Invoke(new MethodInvoker(delegate { button5.Text = "Compare Stats"; }));
+            button5.Invoke(new MethodInvoker(delegate { button5.Enabled = true; }));
         }
 
         /// <summary>
@@ -360,21 +389,21 @@ namespace HellfireMiles
             });
             t.Start();
             t.Join(); //wait for loco threads to finish before loading window
-            while (true)
+            Thread th = new Thread(delegate ()
             {
                 try
                 {
-                    Application.DoEvents();
-                    cs.Show();
-                    cs.dataGridView1.Refresh();
-                }
-                catch (ObjectDisposedException ex) //reset buttons when the window is closed
+                    Application.Run(cs);
+                } catch (ObjectDisposedException)
                 {
-                    button6.Invoke(new MethodInvoker(delegate { button6.Text = "Compare Mileages"; }));
-                    button6.Invoke(new MethodInvoker(delegate { button6.Enabled = true; }));
-                    break; //exit this loop
+                    //ignore
                 }
-            }
+                
+            });
+            th.Start();
+            th.Join();
+            button6.Invoke(new MethodInvoker(delegate { button6.Text = "Compare Mileages"; }));
+            button6.Invoke(new MethodInvoker(delegate { button6.Enabled = true; }));
         }
 
         private void button7_Click(object sender, EventArgs e) //change moves list directory

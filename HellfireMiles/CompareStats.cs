@@ -16,6 +16,7 @@ namespace HellfireMiles
         List<string> classes = new List<string>();
         public CompareStats(string imf, bool stats) //stats is true if its not individual haulages
         {
+            Text = "Compare Stats"; //form title
             importedFile = imf;
             statsMode = stats;
             InitializeComponent();
@@ -53,9 +54,9 @@ namespace HellfireMiles
         {
             System.Diagnostics.Debug.Print("0 - " + category);
             JourneyView jv = new JourneyView("", category, ""); //your stats
-            TractionView tv = new TractionView(true, category, "");
+            TractionView tv = new TractionLeague(category, "");
             JourneyView jv2 = new ImportedJourneyView("", category, "", savefile); //their stats
-            TractionView tv2 = new TractionView(true, category, savefile);
+            TractionView tv2 = new TractionLeague(category, savefile);
             //for averages only
             double x = Math.Round((jv.TotalMiles / jv.Journeys), 2);
             if (jv.Journeys == 0)
