@@ -12,10 +12,11 @@ namespace HellfireMiles
 {
     public partial class JourneyView : Form
     {
-        string csvLocation;
-        int weekno = 0;
-        string[] classes = { "03", "06", "08", "09", "13", "20", "25", "26", "27", "31", "33", "37", "40", "45", "46", "47", "50", "55", "56", "73", "76", "81", "82", "83", "85", "86", "87" };
-        Thread[] threads;
+        string csvLocation; //where the .csv files are stored
+        int weekno = 0; //for table purposes
+        string[] classes = { "03", "06", "08", "09", "13", "20", "25", "26", "27", "31", "33", "37", "40", "45", "46", "47", "50", "55", "56", "73", "76", "81", "82", "83", "85", 
+            "86", "87", "98" }; //a list of classes to use for CompareStats
+        Thread[] threads; //collection of threads to execute for CompareStats
         public double TotalMiles
         { get; set; }
         public double Journeys
@@ -123,7 +124,7 @@ namespace HellfireMiles
                                         continue; //does not match this enabled filter, skip the line
                                     }
                                 }
-                                //all filters match for this move, calculate mileage, etc.
+                                //if we're here, all filters match for this move, calculate mileage, etc.
                                 if (!m.Equals("None"))
                                 {
                                     miles = double.Parse(m);
@@ -214,18 +215,21 @@ namespace HellfireMiles
         }
 
         /// <summary>
-        /// Opens the traction view.
+        /// Opens the traction view via a thread.
         /// </summary>
         private void button2_Click(object sender, EventArgs e)
         {
             Task.Factory.StartNew(() => loadTV()); //load the window in the background, so the main window won't freeze
         }
 
+        /// <summary>
+        /// Launches the traction view.
+        /// </summary>
         private void loadTV()
         {
             button2.Invoke(new MethodInvoker(delegate { button2.Text = "Loading"; }));
             button2.Invoke(new MethodInvoker(delegate { button2.Enabled = false; }));
-            TractionView tv = new TractionView("", "");
+            TractionView tv = new TractionView("", "", 0, "");
             Thread t = new Thread(delegate ()
             {
                 try
@@ -238,7 +242,7 @@ namespace HellfireMiles
                 }
             });
             t.Start();
-            t.Join();
+            t.Join(); //wait for window closure
             button2.Invoke(new MethodInvoker(delegate { button2.Text = "Traction View"; }));
             button2.Invoke(new MethodInvoker(delegate { button2.Enabled = true; }));
         }
@@ -270,6 +274,7 @@ namespace HellfireMiles
                             {
                                 break;
                             }
+                            //write the contents of the JourneyView row to the .hfm file
                             sw.WriteLine(row.Cells["Week #"].Value + "," + row.Cells["Day"].Value + "," + row.Cells["Loco1"].Value + "," + row.Cells["Loco2"].Value + "," +
                                 row.Cells["Loco3"].Value + ",," + row.Cells["From"].Value + "," + row.Cells["To"].Value + "," + row.Cells["Headcode"].Value + "," +
                                 row.Cells["Train"].Value + "," + row.Cells["Mileage"].Value); //writes all data in each line
@@ -369,7 +374,7 @@ namespace HellfireMiles
                 }
             });
             t.Start();
-            t.Join();
+            t.Join(); //wait for window closure
             button5.Invoke(new MethodInvoker(delegate { button5.Text = "Compare Stats"; }));
             button5.Invoke(new MethodInvoker(delegate { button5.Enabled = true; }));
         }
@@ -401,7 +406,7 @@ namespace HellfireMiles
                 
             });
             th.Start();
-            th.Join();
+            th.Join(); //wait for window closure
             button6.Invoke(new MethodInvoker(delegate { button6.Text = "Compare Mileages"; }));
             button6.Invoke(new MethodInvoker(delegate { button6.Enabled = true; }));
         }

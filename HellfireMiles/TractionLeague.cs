@@ -9,7 +9,7 @@ namespace HellfireMiles
 {
     class TractionLeague : TractionView
     {
-        public TractionLeague(string classFilter, string importedFrom) : base(classFilter, importedFrom)
+        public TractionLeague(string classFilter, string comparisonSign, int mileThreshold, string importedFrom) : base(classFilter, comparisonSign, mileThreshold, importedFrom)
         {
             Text = "Traction League"; //form title
             label1.Text = "";
@@ -21,24 +21,23 @@ namespace HellfireMiles
             dataGridView1.Columns[4].Name = "% Cleared";
 
             dataGridView1.Rows.Clear();
-            addClasses();
             button1.Enabled = false;
             button2.Enabled = false;
             textBox1.Enabled = false;
 
-            if (classFilter.Equals(""))
+            if (classFilter.Equals("")) //no filter applied, for display and sometimes other windows' use
             {
-                foreach (var category in classes)
+                foreach (var category in classes) //loop through all classes for haulages
                 {
-                    JourneyView jv = new JourneyView("", category, "");
+                    JourneyView jv = new JourneyView("", category, ""); //filter a JV by loco class
                     TractionView tv;
                     if (importedFrom.Equals(""))
                     { //yours
-                        tv = new TractionView(category, "");
+                        tv = new TractionView(category, "", 0, "");
                     }
                     else
                     {
-                        tv = new TractionView(category, importedFrom);
+                        tv = new TractionView(category, "", 0, importedFrom);
                     }
                     Cleared = tv.Cleared;
                     NumLocos = tv.dataGridView1.Rows.Count;
@@ -57,11 +56,11 @@ namespace HellfireMiles
                 TractionView tv;
                 if (importedFrom.Equals(""))
                 { //yours
-                    tv = new TractionView(classFilter, "");
+                    tv = new TractionView(classFilter, "", 0, "");
                 }
                 else
                 {
-                    tv = new TractionView(classFilter, importedFrom);
+                    tv = new TractionView(classFilter, "", 0, importedFrom);
                 }
                 Cleared = tv.Cleared;
                 NumLocos = tv.dataGridView1.Rows.Count;

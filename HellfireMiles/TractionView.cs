@@ -20,8 +20,16 @@ namespace HellfireMiles
         {
             get;set;
         }
-        protected List<string> classes = new List<string>();
-        public TractionView(string classFilter, string importedFrom)
+        protected string[] classes = { "03", "06", "08", "09", "13", "20", "25", "26", "27", "31", "33", "37", "40", "45", "46", "47", "50", "55", "56", "73", "76", "81", "82", "83", "85",
+            "86", "87", "98" }; //a list of classes
+        /// <summary>
+        /// Initializes an object of the TractionView class that takes optional parameters to filter out mileage data for certain classes only.
+        /// </summary>
+        /// <param name="classFilter">Show all mileages with haulage from only one class, specified by user. If "", does not filter by class.</param>
+        /// <param name="comparisonSign">Show all mileages with haulage that is either less/greater than than a # of miles, specified by user. If "", does not filter by mileage.</param>
+        /// <param name="mileThreshold">Show all mileages with haulage based on mileage, specified by user. If 0, does not filter by mileage.</param>
+        /// <param name="importedFrom">Show mileage data from another user's imported .hfm data. If "", uses user's .csv data.</param>
+        public TractionView(string classFilter, string comparisonSign, double mileThreshold, string importedFrom)
         {
             InitializeComponent();
             dataGridView1.ColumnCount = 3;
@@ -33,7 +41,7 @@ namespace HellfireMiles
                 string l;
                 while ((l = reader.ReadLine()) != null)
                 {
-                    if (classFilter.Equals(""))
+                    if (classFilter.Equals("") && mileThreshold == 0)
                     {
                         Object[] row = new Object[] { l, 0.0, 0 };
                         dataGridView1.Rows.Add(row);
@@ -44,10 +52,13 @@ namespace HellfireMiles
                         button1.Enabled = false;
                         button2.Enabled = false;
                         textBox1.Enabled = false;
-                        if (l.Substring(0, 2).Equals(classFilter))
+                        if (!classFilter.Equals("")) //class filter applied
                         {
-                            Object[] row = new Object[] { l, 0.0, 0 };
-                            dataGridView1.Rows.Add(row);
+                            if (l.Substring(0, 2).Equals(classFilter))
+                            {
+                                Object[] row = new Object[] { l, 0.0, 0 };
+                                dataGridView1.Rows.Add(row);
+                            }
                         }
                     }
 
@@ -94,14 +105,12 @@ namespace HellfireMiles
                             {
                                 miles = double.Parse("0.0");
                             }
+                            //look for cleared locos in all positions
                             for (int i = 0; i < dataGridView1.RowCount - 1; i++)
                             {
                                 if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco1))
                                 {
-                                    dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
-                                    dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
-                                    dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
-                                    dataGridView1.Rows[i].Cells[2].Value = (int)dataGridView1.Rows[i].Cells[2].Value + 1;
+                                    editRow(i, loco1, miles);
                                 }
                             }
                             if (!loco2.Equals(null))
@@ -110,10 +119,7 @@ namespace HellfireMiles
                                 {
                                     if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco2))
                                     {
-                                        dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
-                                        dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
-                                        dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
-                                        dataGridView1.Rows[i].Cells[2].Value = (int)dataGridView1.Rows[i].Cells[2].Value + 1;
+                                        editRow(i, loco2, miles);
                                     }
                                 }
                             }
@@ -123,10 +129,7 @@ namespace HellfireMiles
                                 {
                                     if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco3))
                                     {
-                                        dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
-                                        dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
-                                        dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
-                                        dataGridView1.Rows[i].Cells[2].Value = (int)dataGridView1.Rows[i].Cells[2].Value + 1;
+                                        editRow(i, loco3, miles);
                                     }
                                 }
                             }
@@ -136,10 +139,7 @@ namespace HellfireMiles
                                 {
                                     if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco4))
                                     {
-                                        dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
-                                        dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
-                                        dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
-                                        dataGridView1.Rows[i].Cells[2].Value = (int)dataGridView1.Rows[i].Cells[2].Value + 1;
+                                        editRow(i, loco4, miles);
                                     }
                                 }
                             }
@@ -153,38 +153,77 @@ namespace HellfireMiles
                         Cleared++;
                     }
                 }
-                label1.Text = "Out of " + (dataGridView1.Rows.Count - 1) + " locos of class ";
-                if (classFilter.Equals(""))
+                if (mileThreshold == 0) //no mile filter, so show the bonus message
                 {
-                    label1.Text += "ALL";
-                }
-                else label1.Text += classFilter;
-                label1.Text += ", you have Cleared " + Cleared + " (about " + Math.Round(((double)Cleared / (dataGridView1.Rows.Count - 1)) * 100, 2) + "%). ";
-                switch ((int)(((double)Cleared / (dataGridView1.Rows.Count - 1)) * 10))
+                    label1.Text = "Out of " + (dataGridView1.Rows.Count - 1) + " locos of class ";
+                    if (classFilter.Equals("")) //no filter
+                    {
+                        label1.Text += "ALL";
+                    }
+                    else label1.Text += classFilter;
+                    label1.Text += ", you have Cleared " + Cleared + " (about " + Math.Round(((double)Cleared / (dataGridView1.Rows.Count - 1)) * 100, 2) + "%). ";
+                    switch ((int)(((double)Cleared / (dataGridView1.Rows.Count - 1)) * 10)) //set bonus message by 10% increments
+                    {
+                        case 10:
+                            label1.Text += "Congratulations, that's all of them!";
+                            break;
+                        case 9:
+                        case 8:
+                            label1.Text += "Almost there! Don't lose hope!";
+                            break;
+                        case 7:
+                        case 6:
+                        case 5:
+                            label1.Text += "You're just above halfway, keep hunting!";
+                            break;
+                        case 4:
+                        case 3:
+                            label1.Text += "You've got a few, there's still more out there!";
+                            break;
+                        case 2:
+                        case 1:
+                            label1.Text += "You're just getting started, there's more locos waiting for you!";
+                            break;
+                        default:
+                            label1.Text += "Never a better time to get started!";
+                            break;
+                    }
+                } else //mile filter, delete irrelevant rows
                 {
-                    case 10:
-                        label1.Text += "Congratulations, that's all of them!";
-                        break;
-                    case 9:
-                    case 8:
-                        label1.Text += "Almost there! Don't lose hope!";
-                        break;
-                    case 7:
-                    case 6:
-                    case 5:
-                        label1.Text += "You're just above halfway, keep hunting!";
-                        break;
-                    case 4:
-                    case 3:
-                        label1.Text += "You've got a few, there's still more out there!";
-                        break;
-                    case 2:
-                    case 1:
-                        label1.Text += "You're just getting started, there's more locos waiting for you!";
-                        break;
-                    default:
-                        label1.Text += "Never a better time to get started!";
-                        break;
+                    label1.Text = "";
+                    List<DataGridViewRow> toDelete = new List<DataGridViewRow>();
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (comparisonSign.Equals(">")) {
+                            try
+                            {
+                                if ((double)row.Cells[1].Value < mileThreshold)
+                                {
+                                    toDelete.Add(row);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                //ignore
+                            }
+                        } else if (comparisonSign.Equals("<"))
+                        {
+                            try
+                            {
+                                if ((double)row.Cells[1].Value > mileThreshold)
+                                {
+                                    toDelete.Add(row);
+                                }
+                            } catch (Exception ex)
+                            {
+                                //ignore
+                            }
+                        }
+                    }
+                    foreach (DataGridViewRow row in toDelete)
+                    {
+                        dataGridView1.Rows.Remove(row);
+                    }
                 }
             }
             else //external (only for internal use)
@@ -223,6 +262,7 @@ namespace HellfireMiles
                         {
                             miles = double.Parse("0.0");
                         }
+                        //check if loco is in either of the four loco positions
                         for (int i = 0; i < dataGridView1.RowCount - 1; i++)
                         {
                             if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco1))
@@ -316,7 +356,13 @@ namespace HellfireMiles
                 }
             }
         }
-
+        /// <summary>
+        /// Finds the nth index of a substring in a string.
+        /// </summary>
+        /// <param name="str">The string to search.</param>
+        /// <param name="value">The substring to look for.</param>
+        /// <param name="nth">What occurence of the substring to find.</param>
+        /// <returns>An integer corresponding to the position of the nth index of value in str</returns>
         public static int indexOfNth(string str, string value, int nth = 0)
         {
             if (nth < 0)
@@ -331,7 +377,13 @@ namespace HellfireMiles
 
             return offset;
         }
-
+        /// <summary>
+        /// In complement with the above, finds substring between indices (if that's how the plural is spelt!)
+        /// </summary>
+        /// <param name="str">The string to search.</param>
+        /// <param name="from">The starting index of the string to search</param>
+        /// <param name="to">The ending index of the string, stop searching here</param>
+        /// <returns>The substring of str from the start to end index specified by the code</returns>
         public string substringFromTo(string str, int from, int to)
         {
             try
@@ -348,53 +400,18 @@ namespace HellfireMiles
             
         }
 
-        public double getPercentage()
-        {
-            return Math.Round(((double)Cleared / (dataGridView1.Rows.Count - 1)) * 100, 2);
-        }
-
-        public void addClasses()
-        {
-            classes.Add("03");
-            classes.Add("06");
-            classes.Add("08");
-            classes.Add("09");
-            classes.Add("13");
-            classes.Add("20");
-            classes.Add("25");
-            classes.Add("26");
-            classes.Add("27");
-            classes.Add("31");
-            classes.Add("33");
-            classes.Add("37");
-            classes.Add("40");
-            classes.Add("45");
-            classes.Add("46");
-            classes.Add("47");
-            classes.Add("50");
-            classes.Add("55");
-            classes.Add("56");
-            classes.Add("73");
-            classes.Add("76");
-            classes.Add("81");
-            classes.Add("82");
-            classes.Add("83");
-            classes.Add("85");
-            classes.Add("86");
-            classes.Add("87");
-            classes.Add("98");
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            Task.Factory.StartNew(() => loadTL()); //load the window in the background, so the main window won't freeze
+            Task.Factory.StartNew(() => loadTL()); //load the TractionLeague window in the background, so the main window won't freeze
         }
-
+        /// <summary>
+        /// Loads a TractionLeague window
+        /// </summary>
         private void loadTL()
         {
             button1.Invoke(new MethodInvoker(delegate { button1.Text = "Loading"; }));
             button1.Invoke(new MethodInvoker(delegate { button1.Enabled = false; }));
-            TractionLeague tv = new TractionLeague("", "");
+            TractionLeague tv = new TractionLeague("", "", 0, "");
             Thread t = new Thread(delegate ()
             {
                 try
@@ -416,12 +433,15 @@ namespace HellfireMiles
         {
             Task.Factory.StartNew(() => loadTVFilter()); //load the window in the background, so the main window won't freeze
         }
-
+        /// <summary>
+        /// Loads a TractionView window, filtered by class
+        /// </summary>
         private void loadTVFilter()
         {
             button2.Invoke(new MethodInvoker(delegate { button2.Text = "Loading"; }));
             button2.Invoke(new MethodInvoker(delegate { button2.Enabled = false; }));
-            TractionView tv = new TractionView(textBox1.Text, "");
+            TractionView tv = null;
+            comboBox1.Invoke(new MethodInvoker(delegate { tv = new TractionView(textBox1.Text, (string)comboBox1.SelectedItem, Int32.Parse(textBox2.Text), ""); }));
             Thread t = new Thread(delegate ()
             {
                 try
@@ -437,6 +457,17 @@ namespace HellfireMiles
             t.Join();
             button2.Invoke(new MethodInvoker(delegate { button2.Text = "Sort by Class:"; }));
             button2.Invoke(new MethodInvoker(delegate { button2.Enabled = true; }));
+        }
+
+        private void editRow(int row, string loco, double miles)
+        {
+            if (dataGridView1.Rows[row].Cells[0].Value.ToString().Equals(loco))
+            {
+                dataGridView1.Rows[row].DefaultCellStyle.BackColor = Color.LightGreen;
+                dataGridView1.Rows[row].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[row].Cells[1].Value) + miles;
+                dataGridView1.Rows[row].Cells[1].Value = Math.Round((double)dataGridView1.Rows[row].Cells[1].Value, 2);
+                dataGridView1.Rows[row].Cells[2].Value = (int)dataGridView1.Rows[row].Cells[2].Value + 1;
+            }
         }
     }
 }

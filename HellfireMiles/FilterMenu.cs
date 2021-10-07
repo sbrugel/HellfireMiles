@@ -9,24 +9,26 @@ namespace HellfireMiles
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Shows a new JourneyView with filters applied based on filters selected.
+        /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
             JourneyView JV = null;
             string weekParam, classParam, locoParam;
             if (!checkBox1.Checked)
             {
-                weekParam = "";
+                weekParam = ""; //leave empty ("" means the filter is ignored) if checkbox not checked
             }
             else weekParam = numericUpDown1.Value.ToString();
             if (!checkBox2.Checked)
             {
-                classParam = "";
+                classParam = ""; //leave empty ("" means the filter is ignored) if checkbox not checked
             }
             else classParam = textBox1.Text;
             if (!checkBox3.Checked)
             {
-                locoParam = "";
+                locoParam = ""; //leave empty ("" means the filter is ignored) if checkbox not checked
             }
             else locoParam = textBox2.Text;
             if (!checkBox1.Checked && !checkBox2.Checked && !checkBox3.Checked)
@@ -38,7 +40,9 @@ namespace HellfireMiles
                 JV.Show();
             }
         }
-
+        /// <summary>
+        /// Displays mileages on the filter window based on filters selected.
+        /// </summary>
         private void button2_Click(object sender, EventArgs e)
         {
             JourneyView JV = new JourneyView("", "", textBox2.Text);
@@ -52,13 +56,13 @@ namespace HellfireMiles
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            textBox1.Enabled = !textBox1.Enabled;
+            textBox1.Enabled = !textBox1.Enabled; //toggle
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-            textBox2.Enabled = !textBox2.Enabled;
-            button2.Enabled = !button2.Enabled;
+            textBox2.Enabled = !textBox2.Enabled; //toggle
+            button2.Enabled = !button2.Enabled; //toggle
         }
     }
 }

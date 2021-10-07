@@ -18,7 +18,7 @@ namespace HellfireMiles
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
-                button2.Enabled = true;
+                button2.Enabled = true; //unlock button if a directory is chosen
                 movesdir = @folderBrowserDialog1.SelectedPath;
                 textBox1.Text = movesdir;
             }
