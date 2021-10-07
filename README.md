@@ -45,6 +45,11 @@ These files can also be imported into other PCs' copies of the application. If a
 ## Issues
 - Filtering haulages by loco using the mile threshold in the Traction Viewer will result in a NullReferenceException if ran in debug mode, regardless of the presence of the try-catch block. In VS2019, this can be ignored by pressing Continue once the exception is caught.
 
+## Potential Future Additions
+- Conversion of moves to a neat, text format (button option)
+- Loading screens while opening other forms
+- Add loco depots/sort by depot
+
 ## Closing Remarks
 ### Credits
 - Thank you to Mike Wright for the creation of Hellfire, an absolutely awesome, unique, and intricate game that has costed me hours and hours of free time - all in the name of chasing them locos. Totally worth it.
