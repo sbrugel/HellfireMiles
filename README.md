@@ -39,8 +39,8 @@ These files can also be imported into other PCs' copies of the application. If a
 - Viewing of the complete moves list of other people's data (via the Import function)
 - Comparing statistics (in the format of the Traction League) between two people's data
 - Comparing mileages per loco between two people's data
-![HellfireMiles_ahpQWcG7GM](https://user-images.githubusercontent.com/58154576/136307548-807e4bd4-f448-40b9-b58a-baa36c879701.png)
-
+![HellfireMiles_CF0pgDKytT](https://user-images.githubusercontent.com/58154576/136308490-44bab860-6d9a-4856-b495-f464a3341237.png)
+![HellfireMiles_NisJkveVqE](https://user-images.githubusercontent.com/58154576/136308261-a80bc29b-313e-4226-a657-5dc566facc31.png)
 
 ## Issues
 - Filtering haulages by loco using the mile threshold in the Traction Viewer will result in a NullReferenceException if ran in debug mode, regardless of the presence of the try-catch block. In VS2019, this can be ignored by pressing Continue once the exception is caught.
