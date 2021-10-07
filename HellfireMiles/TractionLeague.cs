@@ -24,6 +24,8 @@ namespace HellfireMiles
             button1.Enabled = false;
             button2.Enabled = false;
             textBox1.Enabled = false;
+            textBox2.Enabled = false;
+            comboBox1.Enabled = false;
 
             if (classFilter.Equals("")) //no filter applied, for display and sometimes other windows' use
             {

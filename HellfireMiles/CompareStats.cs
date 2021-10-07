@@ -49,6 +49,18 @@ namespace HellfireMiles
             theirData.Start();
             yourData.Join();
             theirData.Join();
+            for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+            {
+                if (Double.Parse(dataGridView1.Rows[i].Cells[1].Value.ToString()) > Double.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString()))
+                {
+                    dataGridView1.Rows[i].Cells[1].Style.BackColor = Color.LightGreen;
+                }
+                else if (Double.Parse(dataGridView1.Rows[i].Cells[1].Value.ToString()) < Double.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString()))
+                {
+                    dataGridView1.Rows[i].Cells[2].Style.BackColor = Color.LightGreen;
+                }
+                System.Diagnostics.Debug.Print("still working..." + i + " of " + dataGridView1.Rows.Count);
+            }
         }
         /// <summary>
         /// Fills the data grid view with statistics after grabbing data from .hfm/.csv files
@@ -88,83 +100,20 @@ namespace HellfireMiles
             row = new Object[] { "Class " + category + ": Avg. Mi/Journey", x, x2 };
             dataGridView1.Rows.Add(row);
             dataGridView1.Sort(dataGridView1.Columns[0], ListSortDirection.Ascending);
-        }
-        /// <summary>
-        /// Reads .hfm or .csv data and adds it to the data grid view, putting in clearances and mileages per class.
-        /// <param name="loc">The location to search for data.</param>
-        /// </summary>
-        public void getMoveData(string loc) {
-            using (StreamReader sr = new StreamReader(loc))
+            for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
             {
-                int iter = 0;
-                string currentLine;
-                // currentLine will be null when the StreamReader reaches the end of file
-                while ((currentLine = sr.ReadLine()) != null)
+                if (Double.Parse(dataGridView1.Rows[i].Cells[1].Value.ToString()) > Double.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString()))
                 {
-                    if (iter == 0)
-                    {
-                        iter++;
-                        continue;
-                    }
-                    var loco1 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 0) + 1, indexOfNth(currentLine, ",", 1)); //loco1
-                    var loco2 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 1) + 1, indexOfNth(currentLine, ",", 2)); //loco2
-                    var loco3 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 2) + 1, indexOfNth(currentLine, ",", 3)); //loco3
-                    var loco4 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 3) + 1, indexOfNth(currentLine, ",", 4)); //loco4
-                    var m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 9) + 1, currentLine.Length); //miles
-                    var miles = 0.0;
-                    if (!m.Equals("None"))
-                    {
-                        miles = double.Parse(m);
-                    }
-                    else
-                    {
-                        miles = double.Parse("0.0");
-                    }
-                    //account for all cases where a loco could be - front loco to back loco
-                    for (int i = 0; i < dataGridView1.RowCount - 1; i++)
-                    {
-                        if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco1))
-                        {
-                            dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
-                            dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
-                        }
-                    }
-                    if (!loco2.Equals(null) && !loco2.Equals("None"))
-                    {
-                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
-                        {
-                            if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco2))
-                            {
-                                dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
-                                dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
-                            }
-                        }
-                    }
-                    if (!loco3.Equals(null) && !loco3.Equals("None"))
-                    {
-                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
-                        {
-                            if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco3))
-                            {
-                                dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
-                                dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
-                            }
-                        }
-                    }
-                    if (!loco4.Equals(null) && !loco4.Equals("None"))
-                    {
-                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
-                        {
-                            if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco4))
-                            {
-                                dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
-                                dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
-                            }
-                        }
-                    }
+                    dataGridView1.Rows[i].Cells[1].Style.BackColor = Color.LightGreen;
                 }
+                else if (Double.Parse(dataGridView1.Rows[i].Cells[1].Value.ToString()) < Double.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString()))
+                {
+                    dataGridView1.Rows[i].Cells[2].Style.BackColor = Color.LightGreen;
+                }
+                System.Diagnostics.Debug.Print("still working..." + i + " of " + dataGridView1.Rows.Count);
             }
         }
+
         /// <summary>
         /// Grabs data of moves from the moves directory.
         /// </summary>
@@ -182,7 +131,75 @@ namespace HellfireMiles
             var csv = Directory.GetFiles(csvLocation, "*.csv", SearchOption.AllDirectories);
             foreach (var movesList in csv)
             {
-                getMoveData(movesList);
+                using (StreamReader sr = new StreamReader(movesList))
+                {
+                    int iter = 0;
+                    string currentLine;
+                    // currentLine will be null when the StreamReader reaches the end of file
+                    while ((currentLine = sr.ReadLine()) != null)
+                    {
+                        if (iter == 0)
+                        {
+                            iter++;
+                            continue;
+                        }
+                        var loco1 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 0) + 1, indexOfNth(currentLine, ",", 1)); //loco1
+                        var loco2 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 1) + 1, indexOfNth(currentLine, ",", 2)); //loco2
+                        var loco3 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 2) + 1, indexOfNth(currentLine, ",", 3)); //loco3
+                        var loco4 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 3) + 1, indexOfNth(currentLine, ",", 4)); //loco4
+                        var m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 9) + 1, currentLine.Length); //miles
+                        var miles = 0.0;
+                        if (!m.Equals("None"))
+                        {
+                            miles = double.Parse(m);
+                        }
+                        else
+                        {
+                            miles = double.Parse("0.0");
+                        }
+                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                        {
+                            if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco1))
+                            {
+                                dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
+                                dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
+                            }
+                        }
+                        if (!loco2.Equals(null) && !loco2.Equals("None"))
+                        {
+                            for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                            {
+                                if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco2))
+                                {
+                                    dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
+                                    dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
+                                }
+                            }
+                        }
+                        if (!loco3.Equals(null) && !loco3.Equals("None"))
+                        {
+                            for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                            {
+                                if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco3))
+                                {
+                                    dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
+                                    dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
+                                }
+                            }
+                        }
+                        if (!loco4.Equals(null) && !loco4.Equals("None"))
+                        {
+                            for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                            {
+                                if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco4))
+                                {
+                                    dataGridView1.Rows[i].Cells[1].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[1].Value) + miles;
+                                    dataGridView1.Rows[i].Cells[1].Value = Math.Round((double)dataGridView1.Rows[i].Cells[1].Value, 2);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         /// <summary>
@@ -190,7 +207,82 @@ namespace HellfireMiles
         /// </summary>
         public void getTheirHaulages()
         {
-            getMoveData(importedFile);
+            using (StreamReader sr = new StreamReader(importedFile))
+            {
+                int iter = 0;
+                string currentLine;
+                // currentLine will be null when the StreamReader reaches the end of file
+                while ((currentLine = sr.ReadLine()) != null)
+                {
+                    if (iter == 0)
+                    {
+                        iter++;
+                        continue;
+                    }
+                    var loco1 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 1) + 1, indexOfNth(currentLine, ",", 2)); //loco1
+                    var loco2 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 2) + 1, indexOfNth(currentLine, ",", 3)); //loco2
+                    var loco3 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 3) + 1, indexOfNth(currentLine, ",", 4)); //loco3
+                    var loco4 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 4) + 1, indexOfNth(currentLine, ",", 5)); //loco4
+                    var m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 9) + 1, currentLine.Length); //miles
+                    var miles = 0.0;
+                    if (!m.Equals("None"))
+                    {
+                        try
+                        {
+                            miles = double.Parse(m);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        miles = double.Parse("0.0");
+                    }
+                    for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                    {
+                        if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco1))
+                        {
+                            dataGridView1.Rows[i].Cells[2].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[2].Value) + miles;
+                            dataGridView1.Rows[i].Cells[2].Value = Math.Round((double)dataGridView1.Rows[i].Cells[2].Value, 2);
+                        }
+                    }
+                    if (!loco2.Equals(null) && !loco2.Equals("None"))
+                    {
+                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                        {
+                            if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco2))
+                            {
+                                dataGridView1.Rows[i].Cells[2].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[2].Value) + miles;
+                                dataGridView1.Rows[i].Cells[2].Value = Math.Round((double)dataGridView1.Rows[i].Cells[2].Value, 2);
+                            }
+                        }
+                    }
+                    if (!loco3.Equals(null) && !loco3.Equals("None"))
+                    {
+                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                        {
+                            if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco3))
+                            {
+                                dataGridView1.Rows[i].Cells[2].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[2].Value) + miles;
+                                dataGridView1.Rows[i].Cells[2].Value = Math.Round((double)dataGridView1.Rows[i].Cells[2].Value, 2);
+                            }
+                        }
+                    }
+                    if (!loco4.Equals(null) && !loco4.Equals("None"))
+                    {
+                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                        {
+                            if (dataGridView1.Rows[i].Cells[0].Value.ToString().Equals(loco4))
+                            {
+                                dataGridView1.Rows[i].Cells[2].Value = Convert.ToDouble(dataGridView1.Rows[i].Cells[2].Value) + miles;
+                                dataGridView1.Rows[i].Cells[2].Value = Math.Round((double)dataGridView1.Rows[i].Cells[2].Value, 2);
+                            }
+                        }
+                    }
+                }
+            }
         }
         /// <summary>
         /// Finds the name used for an imported file.

@@ -157,6 +157,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         protected System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.ComboBox comboBox1;
+        protected System.Windows.Forms.ComboBox comboBox1;
     }
 }
