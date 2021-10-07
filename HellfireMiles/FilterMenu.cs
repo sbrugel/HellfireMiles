@@ -52,17 +52,20 @@ namespace HellfireMiles
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             numericUpDown1.Enabled = !numericUpDown1.Enabled; //toggle
+            
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             textBox1.Enabled = !textBox1.Enabled; //toggle
+            checkBox3.Checked = false; //for sanity - can't have both (e.g. 37 class filter, 20001 loco filter)
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
             textBox2.Enabled = !textBox2.Enabled; //toggle
             button2.Enabled = !button2.Enabled; //toggle
+            checkBox2.Checked = false; //for sanity - can't have both (e.g. 37 class filter, 20001 loco filter)
         }
     }
 }
