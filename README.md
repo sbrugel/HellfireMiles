@@ -44,6 +44,7 @@ These files can also be imported into other PCs' copies of the application. If a
 
 ## Issues
 - Filtering haulages by loco using the mile threshold in the Traction Viewer will result in a NullReferenceException if ran in debug mode, regardless of the presence of the try-catch block. In VS2019, this can be ignored by pressing Continue once the exception is caught.
+- Some DataGridView objects can be user edited. This doesn't modify existing move data permanently but it will be fixed in a future commit
 
 ## Potential Future Additions
 - Conversion of moves to a neat, text format (button option)
