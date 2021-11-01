@@ -262,30 +262,23 @@ namespace HellfireMiles
                 string name = Interaction.InputBox("Enter your name:", "", "");
                 string path = saveFileDialog1.FileName;
 
-                if (!File.Exists(path)) // does the file already exist?
+                using (StreamWriter sw = new StreamWriter(path, false))
                 {
-                    // create a file to write to
-                    using (StreamWriter sw = File.CreateText(path))
+                    int iter = 0;
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
-                        int iter = 0;
-                        foreach (DataGridViewRow row in dataGridView1.Rows)
+                        if (iter == dataGridView1.Rows.Count - 1)
                         {
-                            if (iter == dataGridView1.Rows.Count-1)
-                            {
-                                break;
-                            }
-                            //write the contents of the JourneyView row to the .hfm file
-                            sw.WriteLine(row.Cells["Week #"].Value + "," + row.Cells["Day"].Value + "," + row.Cells["Loco1"].Value + "," + row.Cells["Loco2"].Value + "," +
-                                row.Cells["Loco3"].Value + ",," + row.Cells["From"].Value + "," + row.Cells["To"].Value + "," + row.Cells["Headcode"].Value + "," +
-                                row.Cells["Train"].Value + "," + row.Cells["Mileage"].Value); //writes all data in each line
-                            iter++;
+                            break;
                         }
-                        sw.WriteLine(name); //write inputted name on the bottom of the file
-                        MessageBox.Show("Moves list exported as: " + saveFileDialog1.FileName, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //write the contents of the JourneyView row to the .hfm file
+                        sw.WriteLine(row.Cells["Week #"].Value + "," + row.Cells["Day"].Value + "," + row.Cells["Loco1"].Value + "," + row.Cells["Loco2"].Value + "," +
+                            row.Cells["Loco3"].Value + ",," + row.Cells["From"].Value + "," + row.Cells["To"].Value + "," + row.Cells["Headcode"].Value + "," +
+                            row.Cells["Train"].Value + "," + row.Cells["Mileage"].Value); //writes all data in each line
+                        iter++;
                     }
-                } else
-                {
-                    MessageBox.Show("It seems like this file already exists. Please create a new file to export to.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    sw.WriteLine(name); //write inputted name on the bottom of the file
+                    MessageBox.Show("Moves list exported as: " + saveFileDialog1.FileName, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
