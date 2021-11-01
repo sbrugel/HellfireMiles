@@ -302,7 +302,6 @@ namespace HellfireMiles
 
             if (result == DialogResult.OK)
             {
-                MessageBox.Show("yes");
                 new ImportedJourneyView("", "", "", saveFileDialog1.FileName).Show();
             }
         }
