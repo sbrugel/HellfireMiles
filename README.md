@@ -13,6 +13,8 @@ To ensure that data gets recorded in the program, once you're done an in-game we
 
 All you really need to do to get the ball rolling, in terms of setting up the program itself, is to set the directory where all of your Hellfire moves files are. These are saved in .csv format. Once selected, restart the program and your moves list will show based on all .csv files in the folder. You can always change the directory later, if necessary.
 
+Don't have any Hellfire moves files or just want to check the program out with some sample data? There is a .zip file containing a set of moves for you to import into the program, located in the Release section.
+
 ## Prerequisites
 Technically none, although the program is intended to be used in supplement with Hellfire 3 (link above).
 
