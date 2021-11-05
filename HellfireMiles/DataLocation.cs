@@ -9,8 +9,8 @@ namespace HellfireMiles
         string movesdir;
         public DataLocation()
         {
-            button2.Enabled = false;
             InitializeComponent();
+            button2.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)

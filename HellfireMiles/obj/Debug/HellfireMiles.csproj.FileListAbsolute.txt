@@ -12,3 +12,17 @@ C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.
 C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.TractionView.resources
 C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.DataLocation.resources
 C:\Users\sbrug\source\repos\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.CompareStats.resources
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\bin\Debug\HellfireMiles.exe.config
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\bin\Debug\HellfireMiles.exe
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\bin\Debug\HellfireMiles.pdb
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.csproj.AssemblyReference.cache
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.CompareStats.resources
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.DataLocation.resources
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.FilterMenu.resources
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.JourneyView.resources
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.Properties.Resources.resources
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.TractionView.resources
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.csproj.GenerateResource.cache
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.csproj.CoreCompileInputs.cache
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.exe
+C:\Users\Simon\Documents\GitHub\HellfireMiles\HellfireMiles\obj\Debug\HellfireMiles.pdb
