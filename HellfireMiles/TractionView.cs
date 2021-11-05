@@ -41,7 +41,7 @@ namespace HellfireMiles
                 string l;
                 while ((l = reader.ReadLine()) != null)
                 {
-                    if (classFilter.Equals("") && mileThreshold == 0)
+                    if (classFilter.Equals(""))
                     {
                         Object[] row = new Object[] { l, 0.0, 0 };
                         dataGridView1.Rows.Add(row);
@@ -61,7 +61,6 @@ namespace HellfireMiles
                             }
                         }
                     }
-
                 }
             }
 
@@ -192,37 +191,47 @@ namespace HellfireMiles
                 {
                     label1.Text = "";
                     List<DataGridViewRow> toDelete = new List<DataGridViewRow>();
-                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    if (dataGridView1.Rows.Count > 1)
                     {
-                        if (comparisonSign.Equals(">")) {
-                            try
-                            {
-                                if ((double)row.Cells[1].Value < mileThreshold)
-                                {
-                                    toDelete.Add(row);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                //ignore
-                            }
-                        } else if (comparisonSign.Equals("<"))
+                        foreach (DataGridViewRow row in dataGridView1.Rows)
                         {
-                            try
+                            if (comparisonSign.Equals(">"))
                             {
-                                if ((double)row.Cells[1].Value > mileThreshold)
+                                try
                                 {
-                                    toDelete.Add(row);
+                                    if ((double)row.Cells[1].Value < mileThreshold)
+                                    {
+                                        toDelete.Add(row);
+                                    }
                                 }
-                            } catch (Exception ex)
+                                catch (Exception ex)
+                                {
+                                    //ignore
+                                }
+                            }
+                            else if (comparisonSign.Equals("<"))
+                            {
+                                try
+                                {
+                                    if ((double)row.Cells[1].Value > mileThreshold)
+                                    {
+                                        toDelete.Add(row);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    //ignore
+                                }
+                            }
+                            else
                             {
                                 //ignore
                             }
                         }
-                    }
-                    foreach (DataGridViewRow row in toDelete)
-                    {
-                        dataGridView1.Rows.Remove(row);
+                        foreach (DataGridViewRow row in toDelete)
+                        {
+                            dataGridView1.Rows.Remove(row);
+                        }
                     }
                 }
             }
@@ -441,6 +450,11 @@ namespace HellfireMiles
             button2.Invoke(new MethodInvoker(delegate { button2.Text = "Loading"; }));
             button2.Invoke(new MethodInvoker(delegate { button2.Enabled = false; }));
             TractionView tv = null;
+            if (textBox2.Text == "")
+            {
+                textBox2.Invoke(new MethodInvoker(delegate { textBox2.Text = "-1"; }));
+                comboBox1.Invoke(new MethodInvoker(delegate { comboBox1.SelectedItem = ">"; }));
+            }
             comboBox1.Invoke(new MethodInvoker(delegate { tv = new TractionView(textBox1.Text, (string)comboBox1.SelectedItem, Int32.Parse(textBox2.Text), ""); }));
             Thread t = new Thread(delegate ()
             {
@@ -453,6 +467,11 @@ namespace HellfireMiles
                     //ignore since form is closed
                 }
             });
+            if (textBox2.Text == "-1")
+            {
+                textBox2.Invoke(new MethodInvoker(delegate { textBox2.Text = ""; }));
+                comboBox1.Invoke(new MethodInvoker(delegate { comboBox1.SelectedItem = ""; }));
+            }
             t.Start();
             t.Join();
             button2.Invoke(new MethodInvoker(delegate { button2.Text = "Sort by Class:"; }));
