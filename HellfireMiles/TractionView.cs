@@ -447,6 +447,7 @@ namespace HellfireMiles
         /// </summary>
         private void loadTVFilter()
         {
+            string classname = textBox1.Text;
             button2.Invoke(new MethodInvoker(delegate { button2.Text = "Loading"; }));
             button2.Invoke(new MethodInvoker(delegate { button2.Enabled = false; }));
             TractionView tv = null;
@@ -472,6 +473,14 @@ namespace HellfireMiles
                 textBox2.Invoke(new MethodInvoker(delegate { textBox2.Text = ""; }));
                 comboBox1.Invoke(new MethodInvoker(delegate { comboBox1.SelectedItem = ""; }));
             }
+            foreach (DataGridViewRow row in tv.dataGridView1.Rows)
+            {
+                if (row.DefaultCellStyle.BackColor == Color.LightGreen)
+                {
+                    Cleared++;
+                }
+            }
+            tv.label1.Text = "Out of " + (tv.dataGridView1.Rows.Count - 1) + " locos of class " + classname + ", you have Cleared " + tv.Cleared + " (about " + Math.Round(((double)tv.Cleared / (tv.dataGridView1.Rows.Count - 1)) * 100, 2) + "%). ";
             t.Start();
             t.Join();
             button2.Invoke(new MethodInvoker(delegate { button2.Text = "Sort by Class:"; }));
