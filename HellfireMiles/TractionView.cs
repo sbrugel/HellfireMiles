@@ -480,7 +480,10 @@ namespace HellfireMiles
                     Cleared++;
                 }
             }
-            tv.label1.Text = "Out of " + (tv.dataGridView1.Rows.Count - 1) + " locos of class " + classname + ", you have Cleared " + tv.Cleared + " (about " + Math.Round(((double)tv.Cleared / (tv.dataGridView1.Rows.Count - 1)) * 100, 2) + "%). ";
+            if (textBox2.Text == "-1") //do not show % cleared with a mileage filter
+            {
+                tv.label1.Text = "Out of " + (tv.dataGridView1.Rows.Count - 1) + " locos of class " + classname + ", you have Cleared " + tv.Cleared + " (about " + Math.Round(((double)tv.Cleared / (tv.dataGridView1.Rows.Count - 1)) * 100, 2) + "%). ";
+            }
             t.Start();
             t.Join();
             button2.Invoke(new MethodInvoker(delegate { button2.Text = "Sort by Class:"; }));
