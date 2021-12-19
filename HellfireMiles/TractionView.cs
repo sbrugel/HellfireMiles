@@ -32,6 +32,7 @@ namespace HellfireMiles
         public TractionView(string classFilter, string comparisonSign, double mileThreshold, string importedFrom)
         {
             InitializeComponent();
+            button2.Enabled = false; //disable by default because filter textboxes are both empty
             dataGridView1.ColumnCount = 3;
             dataGridView1.Columns[0].Name = "Loco";
             dataGridView1.Columns[1].Name = "Mileage";
@@ -499,6 +500,21 @@ namespace HellfireMiles
                 dataGridView1.Rows[row].Cells[1].Value = Math.Round((double)dataGridView1.Rows[row].Cells[1].Value, 2);
                 dataGridView1.Rows[row].Cells[2].Value = (int)dataGridView1.Rows[row].Cells[2].Value + 1;
             }
+        }
+
+        /// <summary>
+        /// Checks if textBox1/textBox2 (class/mileage filter) are non-empty; if so, enables the Traction View filter button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            button2.Enabled = (!textBox1.Text.Equals("") || !textBox2.Text.Equals(""));
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            button2.Enabled = (!textBox1.Text.Equals("") || !textBox2.Text.Equals(""));
         }
     }
 }
