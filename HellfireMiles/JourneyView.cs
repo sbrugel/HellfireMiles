@@ -158,6 +158,22 @@ namespace HellfireMiles
                     }
                 }
             }
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    try
+                    {
+                        if (cell.Value.Equals("None"))
+                        {
+                            cell.Value = "";
+                        }
+                    } catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
             label1.Text = "You have been on " + Journeys + " journeys, covering a total of " + Decimal.Round((decimal)TotalMiles, 2) + " miles! ";
         }
 
