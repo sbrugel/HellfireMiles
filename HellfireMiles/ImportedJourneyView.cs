@@ -102,7 +102,7 @@ namespace HellfireMiles
                         dataGridView1.Rows.Add(row); //add the row of this move
                     }
                     iter++;
-                    label1.Text = name + " has been on " + Journeys + " journeys, covering a total of " + Decimal.Round((decimal)TotalMiles, 2) + " miles!";
+                    label1.Text = Journeys + " journeys, " + Decimal.Round((decimal)TotalMiles, 2) + " miles";
                     button4.Enabled = false;
                 }
             }
