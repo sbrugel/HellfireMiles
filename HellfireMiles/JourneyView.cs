@@ -12,8 +12,7 @@ namespace HellfireMiles
 {
     public partial class JourneyView : Form
     {
-        string csvLocation; //where the .csv files are stored
-        int weekno = 0; //for table purposes
+        string week, trainclass, loco; //filters (for refreshing)
         string[] classes = { "03", "06", "08", "09", "13", "20", "25", "26", "27", "31", "33", "37", "40", "45", "46", "47", "50", "55", "56", "73", "76", "81", "82", "83", "85", 
             "86", "87", "98" }; //a list of classes to use for CompareStats
         Thread[] threads; //collection of threads to execute for CompareStats
@@ -30,7 +29,19 @@ namespace HellfireMiles
         /// <param name="locoFilter">Show all journeys with haulage from only one loco, specified by user. If "", does not filter by loco.</param>
         public JourneyView(string weekFilter, string classFilter, string locoFilter)
         {
+            week = weekFilter;
+            trainclass = classFilter;
+            loco = locoFilter;
             InitializeComponent();
+            fillTable(false, false, weekFilter, classFilter, locoFilter);
+        }
+
+        public void fillTable(bool trainOnly, bool locoOnly, string weekFilter, string classFilter, string locoFilter)
+        {
+            string csvLocation = ""; //where the .csv files are stored
+            int weekno = 0; //for table purposes
+            Journeys = 0;
+            TotalMiles = 0;
             //putting in the columns
             dataGridView1.ColumnCount = 11;
             string[] gridNames = { "Week #", "Day", "Loco1", "Loco2", "Loco3", "Loco4", "From", "To", "Headcode", "Train", "Mileage" };
@@ -92,6 +103,14 @@ namespace HellfireMiles
 
                         if (currentLine.Length > 10) //is it just the name? if so, skip the line
                         {
+                            if (trainOnly && (loco1.Equals("Bus") || loco1.Equals("Taxi") || loco1.Equals("Walk") || loco1.Equals("Ship"))) //rail moves only, and this is not a loco
+                            {
+                                continue;
+                            }
+                            if (locoOnly && loco1.Any(x => char.IsLetter(x))) //locos only, check if loco1 is a DMU/EMU then skip if it is
+                            {
+                                continue;
+                            }
                             if (!weekFilter.Equals("") || !classFilter.Equals("") || !locoFilter.Equals(""))
                             { //any filters on? 
                                 //disable all buttons on the form
@@ -168,13 +187,14 @@ namespace HellfireMiles
                         {
                             cell.Value = "";
                         }
-                    } catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
 
                     }
                 }
             }
-            label1.Text = "You have been on " + Journeys + " journeys, covering a total of " + Decimal.Round((decimal)TotalMiles, 2) + " miles! ";
+            label1.Text = Journeys + " journeys, " + Decimal.Round((decimal)TotalMiles, 2) + " miles";
         }
 
         /// <summary>
@@ -417,6 +437,13 @@ namespace HellfireMiles
             th.Join(); //wait for window closure
             button6.Invoke(new MethodInvoker(delegate { button6.Text = "Compare Mileages"; }));
             button6.Invoke(new MethodInvoker(delegate { button6.Enabled = true; }));
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            dataGridView1.Rows.Clear();
+            dataGridView1.Columns.Clear();
+            fillTable(comboBox1.SelectedItem.ToString().Contains("Rail"), comboBox1.SelectedItem.ToString().Contains("Loco"), week, trainclass, loco);
         }
 
         private void button7_Click(object sender, EventArgs e) //change moves list directory
