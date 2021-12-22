@@ -32,6 +32,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\chrome_yHSifl03GK.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
@@ -128,6 +132,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dir.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="chrome_yHSifl03GK.ico" />
+    <None Include="Resources\chrome_yHSifl03GK.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

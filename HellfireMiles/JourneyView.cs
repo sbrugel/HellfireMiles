@@ -112,14 +112,14 @@ namespace HellfireMiles
                                 }
                                 if (!classFilter.Equals("")) //sorting by class?
                                 {
-                                    if (!loco1.Substring(0, 2).Equals(classFilter) || loco2.Substring(0, 2).Equals(classFilter) || loco3.Substring(0, 2).Equals(classFilter) || loco4.Substring(0, 2).Equals(classFilter)) //check all possible locos for the first 3 numbers of the class
+                                    if (!loco1.Substring(0, 2).Equals(classFilter) && !loco2.Substring(0, 2).Equals(classFilter) && !loco3.Substring(0, 2).Equals(classFilter) && !loco4.Substring(0, 2).Equals(classFilter)) //check all possible locos for the first 3 numbers of the class
                                     {
                                         continue; //does not match this enabled filter, skip the line
                                     }
                                 }
                                 if (!locoFilter.Equals("")) //sorting by locomotive?
                                 {
-                                    if (!loco1.Equals(locoFilter) || loco2.Equals(locoFilter) || loco3.Equals(locoFilter) || loco4.Equals(locoFilter)) //check all possible locomotives
+                                    if (!loco1.Equals(locoFilter) && !loco2.Equals(locoFilter) && !loco3.Equals(locoFilter) && !loco4.Equals(locoFilter)) //check all possible locomotives
                                     {
                                         continue; //does not match this enabled filter, skip the line
                                     }
