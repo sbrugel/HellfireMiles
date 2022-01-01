@@ -96,10 +96,27 @@ namespace HellfireMiles
                             var loco3 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 2) + 1, indexOfNth(currentLine, ",", 3)); //loco3
                             var loco4 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 3) + 1, indexOfNth(currentLine, ",", 4)); //loco4
                             var m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 9) + 1, currentLine.Length); //miles
-                            var miles = 0.0;
-                            if (!m.Equals("None"))
+                            try
                             {
-                                miles = double.Parse(m);
+                                double numericCheck = double.Parse(loco4); //is the loco a number? (for older CSVs)
+                            } catch (Exception ex) {
+                                m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 8) + 1, currentLine.Length); //miles
+                            }
+                            
+                            var miles = 0.0;
+                            if (!m.Equals("None") && !m.Equals("X"))
+                            {
+                                if (m.Length > 6) //did it get the mileage and only the mileage?
+                                {
+                                    m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 9) + 1, currentLine.Length); //miles
+                                }
+                                try
+                                {
+                                    miles = double.Parse(m);
+                                } catch (Exception ex)
+                                {
+                                    //nada
+                                }
                             }
                             else
                             {
@@ -133,7 +150,7 @@ namespace HellfireMiles
                                     }
                                 }
                             }
-                            if (!loco4.Equals(null))
+                            if (!loco4.Equals(null) || !loco4.Equals("X"))
                             {
                                 for (int i = 0; i < dataGridView1.RowCount - 1; i++)
                                 {
@@ -255,9 +272,21 @@ namespace HellfireMiles
                         var loco3 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 2) + 1, indexOfNth(currentLine, ",", 3)); //loco3
                         var loco4 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 3) + 1, indexOfNth(currentLine, ",", 4)); //loco4
                         var m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 9) + 1, currentLine.Length); //miles
-                        var miles = 0.0;
-                        if (!m.Equals("None"))
+                        try
                         {
+                            double numericCheck = double.Parse(loco4); //is the loco a number? (for older CSVs)
+                        }
+                        catch (Exception ex)
+                        {
+                            m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 8) + 1, currentLine.Length); //miles
+                        }
+                        var miles = 0.0;
+                        if (!m.Equals("None") && !m.Equals("X"))
+                        {
+                            if (m.Length > 6) //did it get the mileage and only the mileage?
+                            {
+                                m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 9) + 1, currentLine.Length); //miles
+                            }
                             try
                             {
                                 miles = double.Parse(m);
@@ -266,7 +295,6 @@ namespace HellfireMiles
                             {
                                 //nothing
                             }
-
                         }
                         else
                         {
@@ -309,7 +337,7 @@ namespace HellfireMiles
                                 }
                             }
                         }
-                        if (!loco4.Equals(null))
+                        if (!loco4.Equals(null) || !loco4.Equals("X"))
                         {
                             for (int i = 0; i < dataGridView1.RowCount - 1; i++)
                             {
