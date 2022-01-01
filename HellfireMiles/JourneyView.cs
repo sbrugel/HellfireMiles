@@ -79,6 +79,12 @@ namespace HellfireMiles
                 weekno++; //iterate through each week
                 using (StreamReader sr = new StreamReader(movesList))
                 {
+                    bool fourLocos = false;
+                    string content = File.ReadAllText(movesList);
+                    if (content.Contains("Loco4")) //older versions have only 3 locos
+                    {
+                        fourLocos = true;
+                    }
                     int iter = 0; //journey number per week
                     string currentLine;
                     // currentLine will be null when the StreamReader reaches the end of file
@@ -89,17 +95,29 @@ namespace HellfireMiles
                             iter++;
                             continue;
                         }
-                        var dow = substringFromTo(currentLine, 0, indexOfNth(currentLine, ",", 0)); //day of week
-                        var loco1 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 0) + 1, indexOfNth(currentLine, ",", 1)); //loco1
-                        var loco2 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 1) + 1, indexOfNth(currentLine, ",", 2)); //loco2
-                        var loco3 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 2) + 1, indexOfNth(currentLine, ",", 3)); //loco3
-                        var loco4 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 3) + 1, indexOfNth(currentLine, ",", 4)); //loco4
-                        var from = substringFromTo(currentLine, indexOfNth(currentLine, ",", 4) + 1, indexOfNth(currentLine, ",", 5)); //from
-                        var to = substringFromTo(currentLine, indexOfNth(currentLine, ",", 5) + 1, indexOfNth(currentLine, ",", 6)); //to
-                        var hc = substringFromTo(currentLine, indexOfNth(currentLine, ",", 6) + 1, indexOfNth(currentLine, ",", 7)); //headcode
-                        var train = substringFromTo(currentLine, indexOfNth(currentLine, ",", 7) + 1, indexOfNth(currentLine, ",", 8)); //train
-                        var m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 9) + 1, currentLine.Length); //miles
-                        var miles = 0.0;
+                        string dow = substringFromTo(currentLine, 0, indexOfNth(currentLine, ",", 0)); //day of week
+                        string loco1 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 0) + 1, indexOfNth(currentLine, ",", 1)); //loco1
+                        string loco2 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 1) + 1, indexOfNth(currentLine, ",", 2)); //loco2
+                        string loco3 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 2) + 1, indexOfNth(currentLine, ",", 3)); //loco3
+                        string loco4 = "", from, to, hc, train;
+                        string m = "";
+                        double miles = 0.0;
+                        if (fourLocos)
+                        {
+                            loco4 = substringFromTo(currentLine, indexOfNth(currentLine, ",", 3) + 1, indexOfNth(currentLine, ",", 4)); //loco4
+                            from = substringFromTo(currentLine, indexOfNth(currentLine, ",", 4) + 1, indexOfNth(currentLine, ",", 5)); //from
+                            to = substringFromTo(currentLine, indexOfNth(currentLine, ",", 5) + 1, indexOfNth(currentLine, ",", 6)); //to
+                            hc = substringFromTo(currentLine, indexOfNth(currentLine, ",", 6) + 1, indexOfNth(currentLine, ",", 7)); //headcode
+                            train = substringFromTo(currentLine, indexOfNth(currentLine, ",", 7) + 1, indexOfNth(currentLine, ",", 8)); //train
+                            m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 9) + 1, currentLine.Length); //miles
+                        } else
+                        {
+                            from = substringFromTo(currentLine, indexOfNth(currentLine, ",", 3) + 1, indexOfNth(currentLine, ",", 4)); //from
+                            to = substringFromTo(currentLine, indexOfNth(currentLine, ",", 4) + 1, indexOfNth(currentLine, ",", 5)); //to
+                            hc = substringFromTo(currentLine, indexOfNth(currentLine, ",", 5) + 1, indexOfNth(currentLine, ",", 6)); //headcode
+                            train = substringFromTo(currentLine, indexOfNth(currentLine, ",", 6) + 1, indexOfNth(currentLine, ",", 7)); //train
+                            m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 8) + 1, currentLine.Length); //miles
+                        }
 
                         if (currentLine.Length > 10) //is it just the name? if so, skip the line
                         {
@@ -159,9 +177,20 @@ namespace HellfireMiles
                             }
                             else
                             {
-                                if (!m.Equals("None"))
+                                if (!m.Equals("None") && !m.Equals(","))
                                 {
-                                    miles = double.Parse(m);
+                                    if (m.Length > 6) //did it get the mileage and only the mileage?
+                                    {
+                                        m = substringFromTo(currentLine, indexOfNth(currentLine, ",", 9) + 1, currentLine.Length); //miles
+                                    }
+                                    
+                                    try
+                                    {
+                                        miles = double.Parse(m);
+                                    } catch (Exception ex)
+                                    {
+                                        MessageBox.Show("An error occured while loading the moves list.\nBad string: " + m + "\nThe program will attempt to load the other moves but errors may occur.");
+                                    }
                                     Journeys++;
                                 }
                                 else //placeholder move
