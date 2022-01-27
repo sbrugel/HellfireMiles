@@ -36,8 +36,9 @@ namespace HellfireMiles
                     sw.WriteLine(textBox1.Text);
                 }
             }
-            MessageBox.Show("Setup completed, please re-run the program to access all program features.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
+            Application.Run(new JourneyView("", "", ""));
+            SetVisibleCore(false);
+            Dispose();
         }
     }
 }
