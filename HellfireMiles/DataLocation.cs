@@ -36,7 +36,7 @@ namespace HellfireMiles
                     sw.WriteLine(textBox1.Text);
                 }
             }
-            new JourneyView("", "", "").Show();
+            new JourneyView().Show();
             SetVisibleCore(false);
         }
     }

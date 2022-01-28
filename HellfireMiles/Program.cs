@@ -17,7 +17,7 @@ namespace HellfireMiles
             if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HellfireMiles\\dir.txt"))
             {
                 Application.Run(new DataLocation());
-            } else Application.Run(new JourneyView("", "", ""));
+            } else Application.Run(new JourneyView());
         }
     }
 }

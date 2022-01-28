@@ -9,7 +9,7 @@ namespace HellfireMiles
 {
     class TractionLeague : TractionView
     {
-        public TractionLeague(string classFilter, string comparisonSign, int mileThreshold, string importedFrom) : base(classFilter, comparisonSign, mileThreshold, importedFrom)
+        public TractionLeague(string classFilter = "", string comparisonSign = "", int mileThreshold = 0, string importedFrom = "") : base(classFilter, comparisonSign, mileThreshold, importedFrom)
         {
             Text = "Traction League"; //form title
             label1.Text = "";
@@ -29,13 +29,14 @@ namespace HellfireMiles
 
             if (classFilter.Equals("")) //no filter applied, for display and sometimes other windows' use
             {
+                JourneyView allJourneys = new JourneyView();
                 foreach (var category in classes) //loop through all classes for haulages
                 {
                     JourneyView jv = new JourneyView("", category, ""); //filter a JV by loco class
                     TractionView tv;
                     if (importedFrom.Equals(""))
                     { //yours
-                        tv = new TractionView(category, "", 0, "");
+                        tv = new TractionView(category);
                     }
                     else
                     {
@@ -58,7 +59,7 @@ namespace HellfireMiles
                 TractionView tv;
                 if (importedFrom.Equals(""))
                 { //yours
-                    tv = new TractionView(classFilter, "", 0, "");
+                    tv = new TractionView(classFilter);
                 }
                 else
                 {

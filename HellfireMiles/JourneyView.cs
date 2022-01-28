@@ -27,7 +27,7 @@ namespace HellfireMiles
         /// <param name="weekFilter">Show all journeys from only one week, specified by user. If "", does not filter by week.</param>
         /// <param name="classFilter">Show all journeys with haulage from only one class, specified by user. If "", does not filter by class.</param>
         /// <param name="locoFilter">Show all journeys with haulage from only one loco, specified by user. If "", does not filter by loco.</param>
-        public JourneyView(string weekFilter, string classFilter, string locoFilter)
+        public JourneyView(string weekFilter = "", string classFilter = "", string locoFilter = "")
         {
             week = weekFilter;
             trainclass = classFilter;
@@ -314,7 +314,7 @@ namespace HellfireMiles
         {
             button2.Invoke(new MethodInvoker(delegate { button2.Text = "Loading"; }));
             button2.Invoke(new MethodInvoker(delegate { button2.Enabled = false; }));
-            TractionView tv = new TractionView("", "", 0, "");
+            TractionView tv = new TractionView();
             Thread t = new Thread(delegate ()
             {
                 try

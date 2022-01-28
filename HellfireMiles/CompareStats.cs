@@ -71,7 +71,7 @@ namespace HellfireMiles
         {
             System.Diagnostics.Debug.Print("0 - " + category);
             JourneyView jv = new JourneyView("", category, ""); //your stats
-            TractionView tv = new TractionLeague(category, "", 0, "");
+            TractionView tv = new TractionLeague(category);
             JourneyView jv2 = new ImportedJourneyView("", category, "", savefile); //their stats
             TractionView tv2 = new TractionLeague(category, "", 0, savefile);
             //for averages only

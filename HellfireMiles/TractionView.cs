@@ -29,7 +29,7 @@ namespace HellfireMiles
         /// <param name="comparisonSign">Show all mileages with haulage that is either less/greater than than a # of miles, specified by user. If "", does not filter by mileage.</param>
         /// <param name="mileThreshold">Show all mileages with haulage based on mileage, specified by user. If 0, does not filter by mileage.</param>
         /// <param name="importedFrom">Show mileage data from another user's imported .hfm data. If "", uses user's .csv data.</param>
-        public TractionView(string classFilter, string comparisonSign, double mileThreshold, string importedFrom)
+        public TractionView(string classFilter = "", string comparisonSign = "", double mileThreshold = 0, string importedFrom = "")
         {
             InitializeComponent();
             button2.Enabled = false; //disable by default because filter textboxes are both empty
@@ -449,7 +449,7 @@ namespace HellfireMiles
         {
             button1.Invoke(new MethodInvoker(delegate { button1.Text = "Loading"; }));
             button1.Invoke(new MethodInvoker(delegate { button1.Enabled = false; }));
-            TractionLeague tv = new TractionLeague("", "", 0, "");
+            TractionLeague tv = new TractionLeague();
             Thread t = new Thread(delegate ()
             {
                 try
